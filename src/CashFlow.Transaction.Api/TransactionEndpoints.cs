@@ -1,0 +1,40 @@
+namespace CashFlow.Transaction.Api;
+
+public static class TransactionEndpoints
+{
+    public static void MapTransactionEndpoints(this WebApplication app)
+    {
+        app.MapGet("/transactions", () =>
+        {
+            var transactions = new List<Domain.Transaction>();
+            
+            return Results.Ok(transactions);
+        })
+        .WithSummary("Get all transactions")
+        .WithDescription("Retrieves a complete list of all financial transactions in the system, including both credit and debit entries.")
+        .WithTags("Transactions")
+        .WithName("GetTransactions");
+
+        app.MapPost("/transactions/credit", () =>
+            {
+                var transaction = new Domain.Transaction();
+            
+                return Results.Ok(transaction);
+            })
+            .WithSummary("Add credit transaction")
+            .WithDescription("Creates a new credit transaction that increases the account balance.")
+            .WithTags("Transactions")
+            .WithName("AddCreditTransaction");
+
+        app.MapPost("/transactions/debit", () =>
+            {
+                var transaction = new Domain.Transaction();
+            
+                return Results.Ok(transaction);
+            })
+            .WithSummary("Add debit transaction")
+            .WithDescription("Creates a new debit transaction that decreases the account balance.")
+            .WithTags("Transactions")
+            .WithName("AddDebitTransaction");
+    }
+}
