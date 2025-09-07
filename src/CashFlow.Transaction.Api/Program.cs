@@ -1,10 +1,14 @@
 using CashFlow.Transaction.Api;
+using CashFlow.Transaction.Api.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// Register application services
+builder.Services.AddScoped<TransactionService>();
 
 var app = builder.Build();
 

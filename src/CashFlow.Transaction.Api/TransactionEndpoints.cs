@@ -1,3 +1,6 @@
+using CashFlow.Transaction.Api.Application;
+using CashFlow.Transaction.Api.Application.Models;
+
 namespace CashFlow.Transaction.Api;
 
 public static class TransactionEndpoints
@@ -15,9 +18,13 @@ public static class TransactionEndpoints
         .WithTags("Transactions")
         .WithName("GetTransactions");
 
-        app.MapPost("/transactions/credit", () =>
+        app.MapPost("/transactions/credit", (CreateCreditTransactionRequest request, TransactionService transactionService) =>
             {
-                var transaction = new Domain.Transaction();
+                var transaction = transactionService.CreateCredit(
+                    request.CustomerId,
+                    request.Value,
+                    request.ReferenceDate
+                );
             
                 return Results.Ok(transaction);
             })
@@ -26,9 +33,13 @@ public static class TransactionEndpoints
             .WithTags("Transactions")
             .WithName("AddCreditTransaction");
 
-        app.MapPost("/transactions/debit", () =>
+        app.MapPost("/transactions/debit", (CreateDebitTransactionRequest request, TransactionService transactionService) =>
             {
-                var transaction = new Domain.Transaction();
+                var transaction = transactionService.CreateDebit(
+                    request.CustomerId,
+                    request.Value,
+                    request.ReferenceDate
+                );
             
                 return Results.Ok(transaction);
             })
