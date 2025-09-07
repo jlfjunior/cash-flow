@@ -7,9 +7,9 @@ public static class TransactionEndpoints
 {
     public static void MapTransactionEndpoints(this WebApplication app)
     {
-        app.MapGet("/transactions", () =>
+        app.MapGet("/transactions", (TransactionService transactionService) =>
         {
-            var transactions = new List<Domain.Transaction>();
+            var transactions = new List<TransactionResponse>();
             
             return Results.Ok(transactions);
         })

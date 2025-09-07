@@ -1,32 +1,37 @@
 using CashFlow.Transaction.Api.Domain;
+using CashFlow.Transaction.Api.Application.Models;
 
 namespace CashFlow.Transaction.Api.Application;
 
 public class TransactionService
 {
-    public Domain.Transaction CreateCredit(Guid customerId, decimal value, DateTime? referenceDate = null)
+    public TransactionResponse CreateCredit(Guid customerId, decimal value, DateTime? referenceDate = null)
     {
-        return new Domain.Transaction(
+        var transaction = new Domain.Transaction(
             id: Guid.NewGuid(),
             customerId: customerId,
             type: TransactionType.Credit,
             value: value,
             referenceDate: referenceDate ?? DateTime.UtcNow
         );
+        
+        return MapToResponse(transaction);
     }
 
-    public Domain.Transaction CreateDebit(Guid customerId, decimal value, DateTime? referenceDate = null)
+    public TransactionResponse CreateDebit(Guid customerId, decimal value, DateTime? referenceDate = null)
     {
-        return new Domain.Transaction(
+        var transaction = new Domain.Transaction(
             id: Guid.NewGuid(),
             customerId: customerId,
             type: TransactionType.Debit,
             value: value,
             referenceDate: referenceDate ?? DateTime.UtcNow
         );
+        
+        return MapToResponse(transaction);
     }
 
-    public List<Domain.Transaction> Search(Guid customerId)
+    public List<TransactionResponse> Search(Guid customerId)
     {
         // Mock data for development and testing
         var transactions = new List<Domain.Transaction>
@@ -73,6 +78,18 @@ public class TransactionService
         // query = query.Where(t => t.CustomerId == customerId);
         // return query.ToList();
         
-        return transactions;
+        return transactions.Select(MapToResponse).ToList();
+    }
+
+    private static TransactionResponse MapToResponse(Domain.Transaction transaction)
+    {
+        return new TransactionResponse
+        {
+            Id = transaction.Id,
+            CustomerId = transaction.CustomerId,
+            Type = transaction.Type.ToString(),
+            ReferenceDate = transaction.ReferenceDate,
+            Value = transaction.Value
+        };
     }
 }
