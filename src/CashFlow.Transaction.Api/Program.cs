@@ -1,5 +1,5 @@
-using CashFlow.Transaction.Api;
 using CashFlow.Transaction.Api.Application;
+using CashFlow.Transaction.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +14,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-{
     app.MapOpenApi();
-}
 
 app.UseHttpsRedirection();
 

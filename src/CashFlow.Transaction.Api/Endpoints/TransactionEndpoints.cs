@@ -1,7 +1,7 @@
 using CashFlow.Transaction.Api.Application;
 using CashFlow.Transaction.Api.Application.Models;
 
-namespace CashFlow.Transaction.Api;
+namespace CashFlow.Transaction.Api.Endpoints;
 
 public static class TransactionEndpoints
 {
