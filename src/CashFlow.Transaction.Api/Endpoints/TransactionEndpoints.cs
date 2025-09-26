@@ -7,9 +7,9 @@ public static class TransactionEndpoints
 {
     public static void MapTransactionEndpoints(this WebApplication app)
     {
-        app.MapGet("/transactions", (TransactionService transactionService) =>
+        app.MapGet("/transactions", (ITransactionService transactionService) =>
         {
-            var transactions = new List<TransactionResponse>();
+            var transactions = transactionService.Search();
             
             return Results.Ok(transactions);
         })
@@ -18,7 +18,7 @@ public static class TransactionEndpoints
         .WithTags("Transactions")
         .WithName("GetTransactions");
 
-        app.MapPost("/transactions/credit", (CreateCreditTransactionRequest request, TransactionService transactionService) =>
+        app.MapPost("/transactions/credit", (CreateCreditTransactionRequest request, ITransactionService transactionService) =>
             {
                 var transaction = transactionService.CreateCredit(
                     request.CustomerId,
@@ -33,7 +33,7 @@ public static class TransactionEndpoints
             .WithTags("Transactions")
             .WithName("AddCreditTransaction");
 
-        app.MapPost("/transactions/debit", (CreateDebitTransactionRequest request, TransactionService transactionService) =>
+        app.MapPost("/transactions/debit", (CreateDebitTransactionRequest request, ITransactionService transactionService) =>
             {
                 var transaction = transactionService.CreateDebit(
                     request.CustomerId,
