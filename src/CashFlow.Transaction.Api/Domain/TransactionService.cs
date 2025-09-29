@@ -8,10 +8,12 @@ public class TransactionService : ITransactionService
 {
     private readonly ILogger<TransactionService> _logger;
     private readonly IMongoCollection<Domain.Transaction> _transactions;
+    private readonly IEventPublisher _eventPublisher;
 
-    public TransactionService(ILogger<TransactionService> logger)
+    public TransactionService(ILogger<TransactionService> logger, IEventPublisher eventPublisher)
     {
         _logger = logger;
+        _eventPublisher = eventPublisher;
         
         var mongoClient = new MongoClient("mongodb://localhost:27017");
         var database = mongoClient.GetDatabase("cashflow");
@@ -46,6 +48,19 @@ public class TransactionService : ITransactionService
             transaction.ReferenceDate,
             transaction.Value);
         
+        // Publish event to RabbitMQ
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await _eventPublisher.PublishAsync(domainEvent, "transaction.created");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to publish TransactionCreatedEvent for transaction {TransactionId}", transaction.Id);
+            }
+        });
+        
         _logger.LogInformation($"Transaction Created. Id: {response.Id}");
         
         return response;
@@ -79,7 +94,18 @@ public class TransactionService : ITransactionService
             transaction.ReferenceDate,
             transaction.Value);
         
-        //TODO: Publish Event
+        // Publish event to RabbitMQ
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await _eventPublisher.PublishAsync(domainEvent, "transaction.created");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to publish TransactionCreatedEvent for transaction {TransactionId}", transaction.Id);
+            }
+        });
         
         _logger.LogInformation($"Transaction Created. Id: {response.Id}");
 
