@@ -1,8 +1,8 @@
-using CashFlow.Transaction.Api.Domain;
-using CashFlow.Transaction.Api.Application.Models;
+using CashFlow.Transaction.Api.Domain.Events;
+using CashFlow.Transaction.Api.Sharable;
 using MongoDB.Driver;
 
-namespace CashFlow.Transaction.Api.Application;
+namespace CashFlow.Transaction.Api.Domain;
 
 public class TransactionService : ITransactionService
 {
@@ -30,7 +30,21 @@ public class TransactionService : ITransactionService
         
         _transactions.InsertOne(transaction);
         
-        var response = MapToResponse(transaction);
+        var response = new TransactionResponse
+        {
+            Id = transaction.Id,
+            CustomerId = transaction.CustomerId,
+            Type = transaction.Type.ToString(),
+            ReferenceDate = transaction.ReferenceDate,
+            Value = transaction.Value
+        };
+        
+        var domainEvent = new TransactionCreatedEvent(
+            transaction.Id,
+            transaction.CustomerId,
+            transaction.Type.ToString(),
+            transaction.ReferenceDate,
+            transaction.Value);
         
         _logger.LogInformation($"Transaction Created. Id: {response.Id}");
         
@@ -49,7 +63,23 @@ public class TransactionService : ITransactionService
         
         _transactions.InsertOne(transaction);
         
-        var response = MapToResponse(transaction);
+        var response = new TransactionResponse
+        {
+            Id = transaction.Id,
+            CustomerId = transaction.CustomerId,
+            Type = transaction.Type.ToString(),
+            ReferenceDate = transaction.ReferenceDate,
+            Value = transaction.Value
+        };
+        
+        var domainEvent = new TransactionCreatedEvent(
+            transaction.Id,
+            transaction.CustomerId,
+            transaction.Type.ToString(),
+            transaction.ReferenceDate,
+            transaction.Value);
+        
+        //TODO: Publish Event
         
         _logger.LogInformation($"Transaction Created. Id: {response.Id}");
 
@@ -103,18 +133,13 @@ public class TransactionService : ITransactionService
         // query = query.Where(t => t.CustomerId == customerId);
         // return query.ToList();
         
-        return transactions.Select(MapToResponse).ToList();
-    }
-
-    private static TransactionResponse MapToResponse(Domain.Transaction transaction)
-    {
-        return new TransactionResponse
+        return transactions.Select(t => new TransactionResponse
         {
-            Id = transaction.Id,
-            CustomerId = transaction.CustomerId,
-            Type = transaction.Type.ToString(),
-            ReferenceDate = transaction.ReferenceDate,
-            Value = transaction.Value
-        };
+            Id = t.Id,
+            CustomerId = t.CustomerId,
+            Type = t.Type.ToString(),
+            ReferenceDate = t.ReferenceDate,
+            Value = t.Value
+        }).ToList();
     }
 }

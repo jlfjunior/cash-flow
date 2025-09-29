@@ -1,6 +1,6 @@
-namespace CashFlow.Transaction.Api.Application.Models;
+namespace CashFlow.Transaction.Api.Sharable;
 
-public class CreateDebitTransactionRequest
+public class CreateCreditTransactionRequest
 {
     public Guid CustomerId { get; set; }
     public decimal Value { get; set; }

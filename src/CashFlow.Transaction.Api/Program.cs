@@ -1,4 +1,4 @@
-using CashFlow.Transaction.Api.Application;
+using CashFlow.Transaction.Api.Domain;
 using CashFlow.Transaction.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
