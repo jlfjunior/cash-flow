@@ -1,5 +1,7 @@
 using CashFlow.Transaction.Api.Domain;
+using CashFlow.Transaction.Api.Domain.Services;
 using CashFlow.Transaction.Api.Endpoints;
+using CashFlow.Transaction.Api.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

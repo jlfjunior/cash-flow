@@ -1,5 +1,7 @@
 using CashFlow.Transaction.Api.Domain;
+using CashFlow.Transaction.Api.Domain.Services;
 using CashFlow.Transaction.Api.Sharable;
+using CashFlow.Transaction.Api.Sharable.Requests;
 
 namespace CashFlow.Transaction.Api.Endpoints;
 

@@ -1,10 +1,11 @@
-using CashFlow.Transaction.Api.Domain.Events;
-using Microsoft.Extensions.Options;
-using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
+using CashFlow.Transaction.Api.Domain;
+using CashFlow.Transaction.Api.Domain.Services;
+using Microsoft.Extensions.Options;
+using RabbitMQ.Client;
 
-namespace CashFlow.Transaction.Api.Domain;
+namespace CashFlow.Transaction.Api.Infrastructure;
 
 public class RabbitMQEventPublisher : IEventPublisher, IDisposable
 {

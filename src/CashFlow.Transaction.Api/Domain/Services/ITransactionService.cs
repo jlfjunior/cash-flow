@@ -1,6 +1,7 @@
 using CashFlow.Transaction.Api.Sharable;
+using CashFlow.Transaction.Api.Sharable.Responses;
 
-namespace CashFlow.Transaction.Api.Domain;
+namespace CashFlow.Transaction.Api.Domain.Services;
 
 public interface ITransactionService
 {

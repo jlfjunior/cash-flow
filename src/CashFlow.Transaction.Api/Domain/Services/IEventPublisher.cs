@@ -1,6 +1,4 @@
-using CashFlow.Transaction.Api.Domain.Events;
-
-namespace CashFlow.Transaction.Api.Domain;
+namespace CashFlow.Transaction.Api.Domain.Services;
 
 public interface IEventPublisher
 {

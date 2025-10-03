@@ -1,4 +1,4 @@
-namespace CashFlow.Transaction.Api.Domain;
+namespace CashFlow.Transaction.Api.Domain.Entities;
 
 public enum TransactionType
 {

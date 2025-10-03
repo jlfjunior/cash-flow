@@ -1,4 +1,4 @@
-namespace CashFlow.Transaction.Api.Sharable;
+namespace CashFlow.Transaction.Api.Sharable.Responses;
 
 public class TransactionResponse
 {
