@@ -1,3 +1,5 @@
+using CashFlow.Lib.Common;
+
 namespace CashFlow.Transaction.Api.Domain.Entities;
 
 public class Transaction
@@ -14,7 +16,7 @@ public class Transaction
     // Public constructor for creating new transactions
     public Transaction(Guid id, Guid customerId, TransactionType type, decimal value, DateTime referenceDate)
     {
-        if (value <= 0)
+        if (value.IsLessThanOrEqualTo(decimal.Zero)) 
             throw new ArgumentException("Transaction value must be greater than zero", nameof(value));
 
         Id = id;
