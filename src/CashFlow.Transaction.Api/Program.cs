@@ -1,4 +1,3 @@
-using CashFlow.Transaction.Api.Domain;
 using CashFlow.Transaction.Api.Domain.Services;
 using CashFlow.Transaction.Api.Endpoints;
 using CashFlow.Transaction.Api.Infrastructure;
@@ -28,3 +27,5 @@ app.UseHttpsRedirection();
 app.MapTransactionEndpoints();
 
 app.Run();
+
+public partial class Program { }
