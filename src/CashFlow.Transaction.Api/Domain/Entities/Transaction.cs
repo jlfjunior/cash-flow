@@ -1,5 +1,6 @@
 using CashFlow.Lib.Common;
 using CashFlow.Transaction.Api.Domain.Events;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace CashFlow.Transaction.Api.Domain.Entities;
 
@@ -7,8 +8,13 @@ public class Transaction
 {
     private ICollection<IEvent> _domainEvents = new List<IEvent>();
     
+    [BsonId]
+    [BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public Guid Id { get; private set; }
+    
+    [BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public Guid CustomerId { get; private set; }
+    
     public TransactionType Type { get; private set; }
     public DateTime ReferenceDate { get; private set; }
     public decimal Value { get; private set; }
