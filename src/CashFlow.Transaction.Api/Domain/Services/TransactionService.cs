@@ -42,7 +42,7 @@ public class TransactionService : ITransactionService
             ReferenceDate = transaction.ReferenceDate,
             Value = transaction.Value
         };
-        
+
         var domainEvent = new TransactionCreatedEvent(
             transaction.Id,
             transaction.CustomerId,
@@ -50,6 +50,8 @@ public class TransactionService : ITransactionService
             transaction.ReferenceDate,
             transaction.Value);
         
+        transaction.AddEvent(domainEvent);
+
         // Publish event to RabbitMQ
         _ = Task.Run(async () =>
         {
@@ -95,6 +97,8 @@ public class TransactionService : ITransactionService
             transaction.Type.ToString(),
             transaction.ReferenceDate,
             transaction.Value);
+        
+        transaction.AddEvent(domainEvent);
         
         // Publish event to RabbitMQ
         _ = Task.Run(async () =>

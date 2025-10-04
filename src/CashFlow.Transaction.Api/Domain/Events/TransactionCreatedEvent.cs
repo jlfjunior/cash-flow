@@ -5,4 +5,4 @@ public record TransactionCreatedEvent(
     Guid CustomerId,
     string Type,
     DateTime ReferenceDate,
-    decimal Value);
+    decimal Value) : IEvent;
