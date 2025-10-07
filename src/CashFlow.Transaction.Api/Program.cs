@@ -1,5 +1,6 @@
 using CashFlow.Transaction.Api.Domain.Services;
 using CashFlow.Transaction.Api.Endpoints;
+using CashFlow.Transaction.Api.Infrastructure;
 using CashFlow.Transaction.Api.Infrastructure.EventBus;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,8 @@ builder.Services.AddOpenApi();
 // Register application services
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddRabbitMQ(builder.Configuration);
+
+builder.Services.Configure<MongoDbConfiguration>(builder.Configuration.GetSection("MongoDB"));
 
 var app = builder.Build();
 

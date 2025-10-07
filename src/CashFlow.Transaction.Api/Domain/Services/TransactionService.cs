@@ -1,7 +1,9 @@
 using CashFlow.Transaction.Api.Domain.Entities;
 using CashFlow.Transaction.Api.Domain.Events;
+using CashFlow.Transaction.Api.Infrastructure;
 using CashFlow.Transaction.Api.Infrastructure.EventBus;
 using CashFlow.Transaction.Api.Sharable.Responses;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace CashFlow.Transaction.Api.Domain.Services;
@@ -12,13 +14,16 @@ public class TransactionService : ITransactionService
     private readonly IMongoCollection<Entities.Transaction> _transactions;
     private readonly IEventBus _eventBus;
 
-    public TransactionService(ILogger<TransactionService> logger, IEventBus eventBus)
+    public TransactionService(ILogger<TransactionService> logger, IEventBus eventBus, IOptions<MongoDbConfiguration> mongoOptions)
     {
         _logger = logger;
         _eventBus = eventBus;
         
-        var mongoClient = new MongoClient("mongodb://admin:password123@localhost:27017/cashflow?authSource=admin");
-        var database = mongoClient.GetDatabase("cashflow");
+        var config = mongoOptions.Value;
+        var connectionString = $"mongodb://{config.Username}:{config.Password}@{config.Host}:{config.Port}/{config.Database}?authSource={config.Username}";
+
+        var client = new MongoClient(connectionString);
+        var database = client.GetDatabase(config.Database);
         _transactions = database.GetCollection<Entities.Transaction>("transactions");
     }
     
@@ -96,23 +101,18 @@ public class TransactionService : ITransactionService
 
     public async Task<List<TransactionResponse>> SearchAsync(Guid? customerId = null)
     {
-        // Mock data for development and testing
-        var transactions = new List<Entities.Transaction>
-        {
-            new (id: Guid.CreateVersion7(), customerId: customerId ?? Guid.NewGuid(), direction: Direction.Credit, value: 1500.00m),
-            new (id: Guid.CreateVersion7(), customerId: customerId ?? Guid.NewGuid(), direction: Direction.Debit, value: 250.75m),
-            new (id: Guid.CreateVersion7(), customerId: customerId ?? Guid.NewGuid(), direction: Direction.Credit, value: 800.00m),
-            new (id: Guid.CreateVersion7(), customerId: customerId ?? Guid.NewGuid(), direction: Direction.Debit, value: 120.50m),
-            new (id: Guid.CreateVersion7(), customerId: customerId ?? Guid.NewGuid(), direction: Direction.Credit, value: 2000.00m)
-        };
-        
-        return transactions.Select(t => new TransactionResponse
-        {
-            Id = t.Id,
-            CustomerId = t.CustomerId,
-            Direction = t.Direction.ToString(),
-            ReferenceDate = t.ReferenceDate,
-            Value = t.Value
-        }).ToList();
+        var transactions = await _transactions
+            .Find(Builders<Domain.Entities.Transaction>.Filter.Empty)
+            .Project(t => new TransactionResponse
+            {
+                Id = t.Id,
+                CustomerId = t.CustomerId,
+                Direction = t.Direction.ToString(),
+                ReferenceDate = t.ReferenceDate,
+                Value = t.Value
+            })
+            .ToListAsync();
+
+        return transactions;
     }
 }
