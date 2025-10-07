@@ -1,6 +1,6 @@
 using CashFlow.Transaction.Api.Domain.Entities;
 using CashFlow.Transaction.Api.Domain.Events;
-using CashFlow.Transaction.Api.Sharable;
+using CashFlow.Transaction.Api.Infrastructure.EventBus;
 using CashFlow.Transaction.Api.Sharable.Responses;
 using MongoDB.Driver;
 
@@ -10,26 +10,61 @@ public class TransactionService : ITransactionService
 {
     private readonly ILogger<TransactionService> _logger;
     private readonly IMongoCollection<Entities.Transaction> _transactions;
-    private readonly IEventPublisher _eventPublisher;
+    private readonly IEventBus _eventBus;
 
-    public TransactionService(ILogger<TransactionService> logger, IEventPublisher eventPublisher)
+    public TransactionService(ILogger<TransactionService> logger, IEventBus eventBus)
     {
         _logger = logger;
-        _eventPublisher = eventPublisher;
+        _eventBus = eventBus;
         
-        var mongoClient = new MongoClient("mongodb://localhost:27017");
+        var mongoClient = new MongoClient("mongodb://admin:password123@localhost:27017/cashflow?authSource=admin");
         var database = mongoClient.GetDatabase("cashflow");
         _transactions = database.GetCollection<Entities.Transaction>("transactions");
     }
     
-    public TransactionResponse CreateCredit(Guid customerId, decimal value, DateTime? referenceDate = null)
+    public async Task<TransactionResponse> CreateCreditAsync(Guid customerId, decimal value)
     {
         var transaction = new Entities.Transaction(
-            id: Guid.NewGuid(),
+            id: Guid.CreateVersion7(),
             customerId: customerId,
-            type: TransactionType.Credit,
-            value: value,
-            referenceDate: referenceDate ?? DateTime.UtcNow
+            direction: Direction.Credit,
+            value: value
+        );
+
+        _transactions.InsertOne(transaction);
+        
+        var response = new TransactionResponse
+        {
+            Id = transaction.Id,
+            CustomerId = transaction.CustomerId,
+            Direction = transaction.Direction.ToString(),
+            ReferenceDate = transaction.ReferenceDate,
+            Value = transaction.Value
+        };
+
+        var @event = new TransactionCreated(
+            transaction.Id,
+            transaction.CustomerId,
+            transaction.Direction.ToString(),
+            transaction.ReferenceDate,
+            transaction.Value);
+        
+        transaction.AddEvent(@event);
+
+        await _eventBus.PublishAsync(transaction.DomainEvents);
+        
+        _logger.LogInformation($"Transaction Created. Id: {response.Id}");
+        
+        return response;
+    }
+
+    public async Task<TransactionResponse> CreateDebitAsync(Guid customerId, decimal value)
+    {
+        var transaction = new Entities.Transaction(
+            id: Guid.CreateVersion7(),
+            customerId: customerId,
+            direction: Direction.Debit,
+            value: value
         );
         
         _transactions.InsertOne(transaction);
@@ -38,138 +73,44 @@ public class TransactionService : ITransactionService
         {
             Id = transaction.Id,
             CustomerId = transaction.CustomerId,
-            Type = transaction.Type.ToString(),
-            ReferenceDate = transaction.ReferenceDate,
-            Value = transaction.Value
-        };
-
-        var domainEvent = new TransactionCreatedEvent(
-            transaction.Id,
-            transaction.CustomerId,
-            transaction.Type.ToString(),
-            transaction.ReferenceDate,
-            transaction.Value);
-        
-        transaction.AddEvent(domainEvent);
-
-        // Publish event to RabbitMQ
-        _ = Task.Run(async () =>
-        {
-            try
-            {
-                await _eventPublisher.PublishAsync(domainEvent, "transaction.created");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to publish TransactionCreatedEvent for transaction {TransactionId}", transaction.Id);
-            }
-        });
-        
-        _logger.LogInformation($"Transaction Created. Id: {response.Id}");
-        
-        return response;
-    }
-
-    public TransactionResponse CreateDebit(Guid customerId, decimal value, DateTime? referenceDate = null)
-    {
-        var transaction = new Entities.Transaction(
-            id: Guid.NewGuid(),
-            customerId: customerId,
-            type: TransactionType.Debit,
-            value: value,
-            referenceDate: referenceDate ?? DateTime.UtcNow
-        );
-        
-        _transactions.InsertOne(transaction);
-        
-        var response = new TransactionResponse
-        {
-            Id = transaction.Id,
-            CustomerId = transaction.CustomerId,
-            Type = transaction.Type.ToString(),
+            Direction = transaction.Direction.ToString(),
             ReferenceDate = transaction.ReferenceDate,
             Value = transaction.Value
         };
         
-        var domainEvent = new TransactionCreatedEvent(
+        var @event = new TransactionCreated(
             transaction.Id,
             transaction.CustomerId,
-            transaction.Type.ToString(),
+            transaction.Direction.ToString(),
             transaction.ReferenceDate,
             transaction.Value);
         
-        transaction.AddEvent(domainEvent);
+        transaction.AddEvent(@event);
         
-        // Publish event to RabbitMQ
-        _ = Task.Run(async () =>
-        {
-            try
-            {
-                await _eventPublisher.PublishAsync(domainEvent, "transaction.created");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to publish TransactionCreatedEvent for transaction {TransactionId}", transaction.Id);
-            }
-        });
-        
+        await _eventBus.PublishAsync(transaction.DomainEvents);
+
         _logger.LogInformation($"Transaction Created. Id: {response.Id}");
 
         return response;
     }
 
-    public List<TransactionResponse> Search(Guid? customerId = null)
+    public async Task<List<TransactionResponse>> SearchAsync(Guid? customerId = null)
     {
         // Mock data for development and testing
         var transactions = new List<Entities.Transaction>
         {
-            new Entities.Transaction(
-                id: Guid.NewGuid(),
-                customerId: customerId ?? Guid.NewGuid(),
-                type: TransactionType.Credit,
-                value: 1500.00m,
-                referenceDate: DateTime.UtcNow.AddDays(-5)
-            ),
-            new Entities.Transaction(
-                id: Guid.NewGuid(),
-                customerId: customerId ?? Guid.NewGuid(),
-                type: TransactionType.Debit,
-                value: 250.75m,
-                referenceDate: DateTime.UtcNow.AddDays(-3)
-            ),
-            new Entities.Transaction(
-                id: Guid.NewGuid(),
-                customerId: customerId ?? Guid.NewGuid(),
-                type: TransactionType.Credit,
-                value: 800.00m,
-                referenceDate: DateTime.UtcNow.AddDays(-1)
-            ),
-            new Entities.Transaction(
-                id: Guid.NewGuid(),
-                customerId: customerId ?? Guid.NewGuid(),
-                type: TransactionType.Debit,
-                value: 120.50m,
-                referenceDate: DateTime.UtcNow.AddHours(-6)
-            ),
-            new Entities.Transaction(
-                id: Guid.NewGuid(),
-                customerId: customerId ?? Guid.NewGuid(),
-                type: TransactionType.Credit,
-                value: 2000.00m,
-                referenceDate: DateTime.UtcNow.AddHours(-2)
-            )
+            new (id: Guid.CreateVersion7(), customerId: customerId ?? Guid.NewGuid(), direction: Direction.Credit, value: 1500.00m),
+            new (id: Guid.CreateVersion7(), customerId: customerId ?? Guid.NewGuid(), direction: Direction.Debit, value: 250.75m),
+            new (id: Guid.CreateVersion7(), customerId: customerId ?? Guid.NewGuid(), direction: Direction.Credit, value: 800.00m),
+            new (id: Guid.CreateVersion7(), customerId: customerId ?? Guid.NewGuid(), direction: Direction.Debit, value: 120.50m),
+            new (id: Guid.CreateVersion7(), customerId: customerId ?? Guid.NewGuid(), direction: Direction.Credit, value: 2000.00m)
         };
-        
-        // In a real application, this would query a database or repository:
-        // var query = _transactionRepository.GetAll();
-        // query = query.Where(t => t.CustomerId == customerId);
-        // return query.ToList();
         
         return transactions.Select(t => new TransactionResponse
         {
             Id = t.Id,
             CustomerId = t.CustomerId,
-            Type = t.Type.ToString(),
+            Direction = t.Direction.ToString(),
             ReferenceDate = t.ReferenceDate,
             Value = t.Value
         }).ToList();

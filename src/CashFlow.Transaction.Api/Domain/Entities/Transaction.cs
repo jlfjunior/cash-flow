@@ -6,7 +6,10 @@ namespace CashFlow.Transaction.Api.Domain.Entities;
 
 public class Transaction
 {
-    private ICollection<IEvent> _domainEvents = new List<IEvent>();
+    [BsonIgnore]
+    private ICollection<IDomainEvent> _domainEvents = new List<IDomainEvent>();
+    [BsonIgnore]
+    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.ToList();
     
     [BsonId]
     [BsonRepresentation(MongoDB.Bson.BsonType.String)]
@@ -15,27 +18,25 @@ public class Transaction
     [BsonRepresentation(MongoDB.Bson.BsonType.String)]
     public Guid CustomerId { get; private set; }
     
-    public TransactionType Type { get; private set; }
+    public Direction Direction { get; private set; }
     public DateTime ReferenceDate { get; private set; }
     public decimal Value { get; private set; }
     
+    protected Transaction() { }
 
-    // Private constructor for entity framework or other ORM frameworks
-    private Transaction() { }
-
-    // Public constructor for creating new transactions
-    public Transaction(Guid id, Guid customerId, TransactionType type, decimal value, DateTime referenceDate)
+    public Transaction(Guid id, Guid customerId, Direction direction, decimal value)
     {
         if (value.IsLessThanOrEqualTo(decimal.Zero)) 
             throw new ArgumentException("Transaction value must be greater than zero", nameof(value));
 
         Id = id;
         CustomerId = customerId;
-        Type = type;
+        Direction = direction;
         Value = value;
-        ReferenceDate = referenceDate;
+        ReferenceDate = DateTime.UtcNow;
     }
 
-    public void AddEvent(IEvent domainEvent) => _domainEvents.Add(domainEvent);
-
+    public void AddEvent(IDomainEvent domainDomainEvent) => _domainEvents.Add(domainDomainEvent);
+    
+    public void ClearDomainEvents() => _domainEvents.Clear();
 }
