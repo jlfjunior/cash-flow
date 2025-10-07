@@ -1,6 +1,6 @@
 using CashFlow.Transaction.Api.Domain.Services;
 using CashFlow.Transaction.Api.Endpoints;
-using CashFlow.Transaction.Api.Infrastructure;
+using CashFlow.Transaction.Api.Infrastructure.EventBus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,13 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-// Configure RabbitMQ settings
-builder.Services.Configure<RabbitMQSettings>(
-    builder.Configuration.GetSection("RabbitMQ"));
-
 // Register application services
 builder.Services.AddScoped<ITransactionService, TransactionService>();
-builder.Services.AddSingleton<IEventPublisher, RabbitMQEventPublisher>();
+builder.Services.AddRabbitMQ(builder.Configuration);
 
 var app = builder.Build();
 

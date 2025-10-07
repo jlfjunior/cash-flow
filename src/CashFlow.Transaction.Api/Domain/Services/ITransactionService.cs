@@ -1,11 +1,10 @@
-using CashFlow.Transaction.Api.Sharable;
 using CashFlow.Transaction.Api.Sharable.Responses;
 
 namespace CashFlow.Transaction.Api.Domain.Services;
 
 public interface ITransactionService
 {
-    TransactionResponse CreateCredit(Guid customerId, decimal value, DateTime? referenceDate = null);
-    TransactionResponse CreateDebit(Guid customerId, decimal value, DateTime? referenceDate = null);
-    List<TransactionResponse> Search(Guid? customerId = null);
+    Task<TransactionResponse> CreateCreditAsync(Guid customerId, decimal value);
+    Task<TransactionResponse> CreateDebitAsync(Guid customerId, decimal value);
+    Task<List<TransactionResponse>> SearchAsync(Guid? customerId = null);
 }
