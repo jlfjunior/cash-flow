@@ -1,17 +1,15 @@
-using CashFlow.Transaction.Api.Domain;
 using CashFlow.Transaction.Api.Domain.Services;
-using CashFlow.Transaction.Api.Sharable;
 using CashFlow.Transaction.Api.Sharable.Requests;
 
 namespace CashFlow.Transaction.Api.Endpoints;
 
-public static class TransactionEndpoints
+public static class CreditTransactionEndpoints
 {
     public static void MapTransactionEndpoints(this WebApplication app)
     {
-        app.MapGet("/transactions", (ITransactionService transactionService) =>
+        app.MapGet("/transactions", async (ITransactionService transactionService) =>
         {
-            var transactions = transactionService.Search();
+            var transactions = await transactionService.SearchAsync();
             
             return Results.Ok(transactions);
         })
@@ -20,13 +18,9 @@ public static class TransactionEndpoints
         .WithTags("Transactions")
         .WithName("GetTransactions");
 
-        app.MapPost("/transactions/credit", (CreateCreditTransactionRequest request, ITransactionService transactionService) =>
+        app.MapPost("/transactions/credit", async (CreateCreditTransactionRequest request, ITransactionService transactionService) =>
             {
-                var transaction = transactionService.CreateCredit(
-                    request.CustomerId,
-                    request.Value,
-                    request.ReferenceDate
-                );
+                var transaction = await transactionService.CreateCreditAsync(request.CustomerId, request.Value);
             
                 return Results.Ok(transaction);
             })
@@ -35,13 +29,9 @@ public static class TransactionEndpoints
             .WithTags("Transactions")
             .WithName("AddCreditTransaction");
 
-        app.MapPost("/transactions/debit", (CreateDebitTransactionRequest request, ITransactionService transactionService) =>
+        app.MapPost("/transactions/debit", async (CreateDebitTransactionRequest request, ITransactionService transactionService) =>
             {
-                var transaction = transactionService.CreateDebit(
-                    request.CustomerId,
-                    request.Value,
-                    request.ReferenceDate
-                );
+                var transaction = await transactionService.CreateDebitAsync(request.CustomerId, request.Value);
             
                 return Results.Ok(transaction);
             })
