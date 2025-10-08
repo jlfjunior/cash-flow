@@ -1,6 +1,6 @@
-namespace CashFlow.Transaction.Api.Infrastructure.EventBus;
+namespace CashFlow.Lib.EventBus;
 
-public class RabbitMQConfiguration
+public class RabbitMqConfiguration
 {
     public string HostName { get; set; }
     public string Username { get; set; }

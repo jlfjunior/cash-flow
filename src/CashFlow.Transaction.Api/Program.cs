@@ -1,7 +1,7 @@
+using CashFlow.Lib.EventBus;
 using CashFlow.Transaction.Api.Domain.Services;
 using CashFlow.Transaction.Api.Endpoints;
 using CashFlow.Transaction.Api.Infrastructure;
-using CashFlow.Transaction.Api.Infrastructure.EventBus;
 
 var builder = WebApplication.CreateBuilder(args);
 

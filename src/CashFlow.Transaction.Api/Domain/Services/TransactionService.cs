@@ -1,7 +1,7 @@
+using CashFlow.Lib.EventBus;
 using CashFlow.Transaction.Api.Domain.Entities;
 using CashFlow.Transaction.Api.Domain.Events;
 using CashFlow.Transaction.Api.Infrastructure;
-using CashFlow.Transaction.Api.Infrastructure.EventBus;
 using CashFlow.Transaction.Api.Sharable.Responses;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
