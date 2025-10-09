@@ -24,7 +24,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapTransactionEndpoints();
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.Run();
 
 public partial class Program { }
