@@ -2,6 +2,7 @@ using CashFlow.Lib.EventBus;
 using CashFlow.Transaction.Api.Domain.Services;
 using CashFlow.Transaction.Api.Endpoints;
 using CashFlow.Transaction.Api.Infrastructure;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,9 +20,12 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
+{
     app.MapOpenApi();
+    app.MapScalarApiReference();
+}
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.MapTransactionEndpoints();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
