@@ -13,7 +13,6 @@ builder.Services.AddOpenApi();
 // Register application services
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddRabbitMQ(builder.Configuration);
-
 builder.Services.Configure<MongoDbConfiguration>(builder.Configuration.GetSection("MongoDB"));
 
 var app = builder.Build();

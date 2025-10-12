@@ -55,8 +55,7 @@ public class TransactionService : ITransactionService
             transaction.Value);
         
         transaction.AddEvent(@event);
-        
-        await _eventBus.PublishAsync(transaction.Events);
+        await _eventBus.PublishAsync(@event);
         
         _logger.LogInformation($"Transaction Created. Id: {response.Id}");
         
@@ -92,7 +91,7 @@ public class TransactionService : ITransactionService
         
         transaction.AddEvent(@event);
         
-        await _eventBus.PublishAsync(transaction.Events);
+        await _eventBus.PublishAsync(@event);
 
         _logger.LogInformation($"Transaction Created. Id: {response.Id}");
 
