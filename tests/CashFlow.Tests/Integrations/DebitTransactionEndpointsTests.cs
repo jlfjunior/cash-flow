@@ -12,6 +12,6 @@ public class DebitTransactionEndpointsTests
     [Fact]
     public async Task TransactionEndpoints_ShouldCreateDebit_SuccessfullyAsync()
     {
-        var request = new CreateDebitTransactionRequest(CustomerId: Guid.CreateVersion7(), Value: 100m);
+        var request = new DebitTransactionRequest(CustomerId: Guid.CreateVersion7(), Value: 100m);
     }
 }

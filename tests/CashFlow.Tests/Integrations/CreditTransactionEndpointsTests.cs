@@ -20,7 +20,7 @@ public class CreditTransactionEndpointsTests : IClassFixture<ServerFactory>
     public async Task TransactionEndpoints_ShouldCreateCredit_SuccessfullyAsync()
     {
         var serviceScope = _serviceScope.ServiceProvider.GetRequiredService<ITransactionService>();
-        var request = new CreateCreditTransactionRequest(CustomerId: Guid.CreateVersion7(), Value: 100m);
+        var request = new CreditTransactionRequest(CustomerId: Guid.CreateVersion7(), Value: 100m);
         var response = await _httpClient.PostAsJsonAsync("transactions/credit", request);
         var transactions = await serviceScope.SearchAsync(customerId: request.CustomerId);
         

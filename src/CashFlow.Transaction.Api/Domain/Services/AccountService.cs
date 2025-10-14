@@ -36,7 +36,7 @@ public class AccountService : IAccountService
         
         account.AddEvent(@event);
         
-        await _eventBus.PublishAsync(@event);
+        await _eventBus.PublishAsync(@event, "account.created");
         
         _logger.LogInformation($"Account created for customer: {customerId}");
 

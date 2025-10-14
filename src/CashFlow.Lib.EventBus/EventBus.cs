@@ -1,9 +1,10 @@
-using System.Linq;
+using System;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
 namespace CashFlow.Lib.EventBus;
 
@@ -18,14 +19,13 @@ public class EventBus : IEventBus
         _factory = factory;
     }
 
-    public async Task PublishAsync<T>(T @event) where T : class
+    public async Task PublishAsync<T>(T @event, string queueName) where T : class
     {
         await using var connection = await _factory.CreateConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
         
         var message = JsonSerializer.Serialize(@event);
         var body = Encoding.UTF8.GetBytes(message);
-        var queueName = GetQueueName(@event);
         
         await channel.QueueDeclareAsync(queue: queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
         await channel.BasicPublishAsync(exchange: string.Empty, routingKey: queueName, body: body);
@@ -33,12 +33,41 @@ public class EventBus : IEventBus
         _logger.LogInformation($"Publishing domain event: {queueName} - {message}");
     }
 
-    private static string GetQueueName<T>(T @event)
+    public async Task SubscribeAsync<T>(string queueName, Func<T, Task> handler) where T : class
     {
-        var queueName = "Queuing" + string.Concat(
-            @event.GetType().Name.Select(c => char.IsUpper(c) ? $".{c}" : c.ToString())
-        );
+        var connection = await _factory.CreateConnectionAsync();
+        var channel = await connection.CreateChannelAsync();
 
-        return queueName;
+        await channel.QueueDeclareAsync(queue: queueName, durable: false, exclusive: false, autoDelete: false,
+            arguments: null);
+
+        var consumer = new AsyncEventingBasicConsumer(channel);
+        consumer.ReceivedAsync += async (model, ea) =>
+        {
+            try
+            {
+                var body = ea.Body.ToArray();
+                var json = Encoding.UTF8.GetString(body);
+                var _jsonOptions = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true // ajuda quando vier "id" vs "Id"
+                };
+                var message = JsonSerializer.Deserialize<T>(json, _jsonOptions);
+
+                if (message != null)
+                {
+                    await handler(message);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing message from queue {QueueName}", queueName);
+            }
+        };
+
+        await channel.BasicConsumeAsync(queueName, autoAck: true, consumer: consumer);
+        
+        _logger.LogInformation("Started consuming from queue: {QueueName}", queueName);
     }
+
 }

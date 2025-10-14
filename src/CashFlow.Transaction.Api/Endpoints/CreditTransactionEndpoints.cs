@@ -18,7 +18,7 @@ public static class CreditTransactionEndpoints
         .WithTags("Transactions")
         .WithName("GetTransactions");
 
-        app.MapPost("/transactions/credit", async (CreateCreditTransactionRequest request, ITransactionService transactionService) =>
+        app.MapPost("/transactions/credit", async (CreditTransactionRequest request, ITransactionService transactionService) =>
             {
                 var transaction = await transactionService.CreateCreditAsync(request.CustomerId, request.Value);
             
@@ -29,7 +29,7 @@ public static class CreditTransactionEndpoints
             .WithTags("Transactions")
             .WithName("AddCreditTransaction");
 
-        app.MapPost("/transactions/debit", async (CreateDebitTransactionRequest request, ITransactionService transactionService) =>
+        app.MapPost("/transactions/debit", async (DebitTransactionRequest request, ITransactionService transactionService) =>
             {
                 var transaction = await transactionService.CreateDebitAsync(request.CustomerId, request.Value);
             
