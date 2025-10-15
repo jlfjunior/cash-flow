@@ -4,7 +4,7 @@ namespace CashFlow.Transaction.Api.Domain.Services;
 
 public interface ITransactionService
 {
-    Task<TransactionResponse> CreateCreditAsync(Guid customerId, decimal value);
-    Task<TransactionResponse> CreateDebitAsync(Guid customerId, decimal value);
-    Task<List<TransactionResponse>> SearchAsync(Guid? customerId = null);
+    Task<List<TransactionResponse>> SearchAsync(Guid? accountId = null);
+    Task<TransactionResponse> CreateCreditAsync(Guid accountId, decimal value);
+    Task<TransactionResponse> CreateDebitAsync(Guid accountId, decimal value);
 }

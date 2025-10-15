@@ -27,11 +27,10 @@ public class TransactionService : ITransactionService
         _transactions = database.GetCollection<Entities.Transaction>("transactions");
     }
     
-    public async Task<TransactionResponse> CreateCreditAsync(Guid customerId, decimal value)
+    public async Task<TransactionResponse> CreateCreditAsync(Guid accountId, decimal value)
     {
         var transaction = new Entities.Transaction(
-            id: Guid.CreateVersion7(),
-            customerId: customerId,
+            accountId: accountId,
             direction: Direction.Credit,
             value: value
         );
@@ -41,7 +40,7 @@ public class TransactionService : ITransactionService
         var response = new TransactionResponse
         {
             Id = transaction.Id,
-            CustomerId = transaction.CustomerId,
+            AccountId = transaction.AccountId,
             Direction = transaction.Direction.ToString(),
             ReferenceDate = transaction.ReferenceDate,
             Value = transaction.Value
@@ -49,7 +48,7 @@ public class TransactionService : ITransactionService
 
         var @event = new TransactionCreated(
             transaction.Id,
-            transaction.CustomerId,
+            transaction.AccountId,
             transaction.Direction.ToString(),
             transaction.ReferenceDate,
             transaction.Value);
@@ -62,11 +61,10 @@ public class TransactionService : ITransactionService
         return response;
     }
 
-    public async Task<TransactionResponse> CreateDebitAsync(Guid customerId, decimal value)
+    public async Task<TransactionResponse> CreateDebitAsync(Guid accountId, decimal value)
     {
         var transaction = new Entities.Transaction(
-            id: Guid.CreateVersion7(),
-            customerId: customerId,
+            accountId: accountId,
             direction: Direction.Debit,
             value: value
         );
@@ -76,7 +74,7 @@ public class TransactionService : ITransactionService
         var response = new TransactionResponse
         {
             Id = transaction.Id,
-            CustomerId = transaction.CustomerId,
+            AccountId = transaction.AccountId,
             Direction = transaction.Direction.ToString(),
             ReferenceDate = transaction.ReferenceDate,
             Value = transaction.Value
@@ -84,7 +82,7 @@ public class TransactionService : ITransactionService
         
         var @event = new TransactionCreated(
             transaction.Id,
-            transaction.CustomerId,
+            transaction.AccountId,
             transaction.Direction.ToString(),
             transaction.ReferenceDate,
             transaction.Value);
@@ -98,14 +96,14 @@ public class TransactionService : ITransactionService
         return response;
     }
 
-    public async Task<List<TransactionResponse>> SearchAsync(Guid? customerId = null)
+    public async Task<List<TransactionResponse>> SearchAsync(Guid? accountId = null)
     {
         var transactions = await _transactions
             .Find(Builders<Domain.Entities.Transaction>.Filter.Empty)
             .Project(t => new TransactionResponse
             {
                 Id = t.Id,
-                CustomerId = t.CustomerId,
+                AccountId = t.AccountId,
                 Direction = t.Direction.ToString(),
                 ReferenceDate = t.ReferenceDate,
                 Value = t.Value

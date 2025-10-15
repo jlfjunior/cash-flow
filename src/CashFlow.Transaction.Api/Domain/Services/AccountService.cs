@@ -2,6 +2,7 @@ using CashFlow.Lib.EventBus;
 using CashFlow.Transaction.Api.Domain.Entities;
 using CashFlow.Transaction.Api.Domain.Events;
 using CashFlow.Transaction.Api.Infrastructure;
+using CashFlow.Transaction.Api.Sharable.Responses;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -39,7 +40,5 @@ public class AccountService : IAccountService
         await _eventBus.PublishAsync(@event, "account.created");
         
         _logger.LogInformation($"Account created for customer: {customerId}");
-
-        await Task.CompletedTask;
     }
 }

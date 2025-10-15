@@ -2,7 +2,7 @@ namespace CashFlow.Transaction.Api.Domain.Events;
 
 public record TransactionCreated(
     Guid Id,
-    Guid CustomerId,
+    Guid AccountId,
     string Direction,
     DateTime ReferenceDate,
     decimal Value) : IEvent;
