@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CashFlow.Lib.Common\CashFlow.Lib.Common.csproj" />
+    <ProjectReference Include="..\CashFlow.Lib.Sharable\CashFlow.Lib.Sharable.csproj" />
     <ProjectReference Include="..\CashFlow.Lib.EventBus\CashFlow.Lib.EventBus.csproj" />
   </ItemGroup>
 

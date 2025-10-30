@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CashFlow.Lib.Common;
+namespace CashFlow.Lib.Sharable;
 
 public static class DateTimeExtensions
 {

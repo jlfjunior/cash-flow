@@ -1,4 +1,4 @@
-using CashFlow.Lib.Common;
+using CashFlow.Lib.Sharable;
 
 namespace CashFlow.Transaction.Api.Domain.Entities;
 

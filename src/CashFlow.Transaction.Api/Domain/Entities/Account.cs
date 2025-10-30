@@ -1,4 +1,4 @@
-using CashFlow.Lib.Common;
+using CashFlow.Lib.Sharable;
 using CashFlow.Transaction.Api.Domain.Events;
 
 namespace CashFlow.Transaction.Api.Domain.Entities;

@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Tests", "tests\Cas
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F430418C-DA65-43B2-A973-2EA966ED645C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Lib.Common", "src\CashFlow.Lib.Common\CashFlow.Lib.Common.csproj", "{1C147B7E-3CB0-4B6C-95AF-BA5FE7170B83}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Lib.Sharable", "src\CashFlow.Lib.Sharable\CashFlow.Lib.Sharable.csproj", "{1C147B7E-3CB0-4B6C-95AF-BA5FE7170B83}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Consolidation.Api", "src\CashFlow.Consolidation.Api\CashFlow.Consolidation.Api.csproj", "{E2B8FFDC-7FCF-47BE-BD2B-4BDA635057E9}"
 EndProject

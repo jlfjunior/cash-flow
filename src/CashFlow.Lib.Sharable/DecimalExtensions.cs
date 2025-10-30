@@ -1,4 +1,4 @@
-namespace CashFlow.Lib.Common;
+namespace CashFlow.Lib.Sharable;
 
 public static class DecimalExtensions
 {
