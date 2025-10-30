@@ -1,4 +1,4 @@
-using CashFlow.Customer.Api.Domain.Services;
+using CashFlow.Customer.Api.Application.Responses;
 
 namespace CashFlow.Customer.Api.Domain.Repositories;
 

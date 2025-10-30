@@ -1,22 +1,25 @@
+using CashFlow.Customer.Api.Application.Requests;
+using CashFlow.Customer.Api.Application.Responses;
 using CashFlow.Customer.Api.Domain.Events;
+using CashFlow.Customer.Api.Infrastructure;
 using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace CashFlow.Customer.Api.Domain.Services;
+namespace CashFlow.Customer.Api.Application;
 
 public interface ICreateCustomer
 {
-    Task<CreateCustomerResponse> HandleAsync(CreateCustomerRequest request, CancellationToken ct);
+    Task<CreateCustomerResponse> ExecuteAsync(CreateCustomerRequest request, CancellationToken ct);
 }
 
-public class CustomerService : ICreateCustomer
+public class CreateCustomer : ICreateCustomer
 {
-    private readonly ILogger<CustomerService> _logger;
-    private readonly IMongoCollection<Customer> _customers;
+    private readonly ILogger<CreateCustomer> _logger;
+    private readonly IMongoCollection<Domain.Customer> _customers;
     private readonly IEventBus _eventBus;
 
-    public CustomerService(ILogger<CustomerService> logger, IOptions<MongoDbConfiguration> mongoOptions, IEventBus eventBus)
+    public CreateCustomer(ILogger<CreateCustomer> logger, IOptions<MongoDbConfiguration> mongoOptions, IEventBus eventBus)
     {
         _logger = logger;
         _eventBus = eventBus;
@@ -27,12 +30,12 @@ public class CustomerService : ICreateCustomer
 
         var client = new MongoClient(connectionString);
         var database = client.GetDatabase(config.Database);
-        _customers = database.GetCollection<Customer>("customers");
+        _customers = database.GetCollection<Domain.Customer>("customers");
     }
     
-    public async Task<CreateCustomerResponse> HandleAsync(CreateCustomerRequest request, CancellationToken ct)
+    public async Task<CreateCustomerResponse> ExecuteAsync(CreateCustomerRequest request, CancellationToken ct)
     {
-        var customer = new Customer(request.FullName);
+        var customer = new Domain.Customer(request.FullName);
         
         await _customers.InsertOneAsync(customer, cancellationToken: ct);
 
@@ -40,7 +43,7 @@ public class CustomerService : ICreateCustomer
         
         await _eventBus.PublishAsync(customerEvent, "queuing.customers.created");
         
-        _logger.LogInformation("Created customer {FullName} Id: {Id}", customer.FullName,  customer.Id);
+        _logger.LogInformation("Created customer {FullName} - Id: {Id}", customer.FullName,  customer.Id);
         
         return new CreateCustomerResponse(customer.Id, customer.FullName);
     }

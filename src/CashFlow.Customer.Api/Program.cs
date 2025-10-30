@@ -1,7 +1,8 @@
-using CashFlow.Customer.Api;
-using CashFlow.Customer.Api.Domain;
-using CashFlow.Customer.Api.Domain.Services;
+using CashFlow.Customer.Api.Application;
+using CashFlow.Customer.Api.Application.Requests;
+using CashFlow.Customer.Api.Application.Responses;
 using CashFlow.Customer.Api.Domain.Repositories;
+using CashFlow.Customer.Api.Infrastructure;
 using CashFlow.Lib.EventBus;
 using Scalar.AspNetCore;
 
@@ -12,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<ICustomerRepository,  CustomerRepository>();
-builder.Services.AddScoped<ICreateCustomer,  CustomerService>();
+builder.Services.AddScoped<ICreateCustomer,  CreateCustomer>();
 
 builder.Services.AddRabbitMQ(builder.Configuration);
 builder.Services.Configure<MongoDbConfiguration>(builder.Configuration.GetSection("MongoDB"));
@@ -39,7 +40,7 @@ app.MapGet("/customers", async () =>
 
 app.MapPost("/customers", async (CreateCustomerRequest request, ICreateCustomer service, CancellationToken ct) =>
 {
-    var customer = await service.HandleAsync(request, ct);
+    var customer = await service.ExecuteAsync(request, ct);
     
     return Results.Ok(customer);
 })

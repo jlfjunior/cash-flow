@@ -1,12 +1,14 @@
-using CashFlow.Customer.Api.Domain.Services;
+using CashFlow.Customer.Api.Application;
+using CashFlow.Customer.Api.Application.Responses;
+using CashFlow.Customer.Api.Domain.Repositories;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace CashFlow.Customer.Api.Domain.Repositories;
+namespace CashFlow.Customer.Api.Infrastructure;
 
 public class CustomerRepository : ICustomerRepository
 {
-    private readonly IMongoCollection<Customer> _customers;
+    private readonly IMongoCollection<Domain.Customer> _customers;
 
     public CustomerRepository(IOptions<MongoDbConfiguration> mongoOptions)
     {
@@ -16,13 +18,13 @@ public class CustomerRepository : ICustomerRepository
 
         var client = new MongoClient(connectionString);
         var database = client.GetDatabase(config.Database);
-        _customers = database.GetCollection<Customer>("customers");
+        _customers = database.GetCollection<Domain.Customer>("customers");
     }
 
     public async Task<IEnumerable<CreateCustomerResponse>> SearchAsync()
     {
         var customers = await _customers
-            .Find(Builders<Customer>.Filter.Empty)
+            .Find(Builders<Domain.Customer>.Filter.Empty)
             .Project(t => new CreateCustomerResponse(t.Id, t.FullName))
             .ToListAsync();
 

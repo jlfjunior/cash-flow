@@ -1,4 +1,4 @@
-namespace CashFlow.Customer.Api;
+namespace CashFlow.Customer.Api.Infrastructure;
 
 public record class MongoDbConfiguration
 {

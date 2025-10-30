@@ -1,3 +1,3 @@
-namespace CashFlow.Customer.Api.Domain.Services;
+namespace CashFlow.Customer.Api.Application.Requests;
 
 public record CreateCustomerRequest(string FullName);
