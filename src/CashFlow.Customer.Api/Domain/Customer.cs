@@ -15,4 +15,6 @@ public class Customer
         Id = Guid.CreateVersion7();
         FullName = fullName;
     }
+    
+    public void WithFullName(string fullName) => FullName = fullName;
 }

@@ -43,7 +43,7 @@ public class CreateCustomer : ICreateCustomer
         
         await _eventBus.PublishAsync(customerEvent, "queuing.customers.created");
         
-        _logger.LogInformation("Created customer {FullName} - Id: {Id}", customer.FullName,  customer.Id);
+        _logger.LogInformation("Created customer. Id: {Id}", customer.Id);
         
         return new CreateCustomerResponse(customer.Id, customer.FullName);
     }

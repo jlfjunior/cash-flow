@@ -14,6 +14,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<ICustomerRepository,  CustomerRepository>();
 builder.Services.AddScoped<ICreateCustomer,  CreateCustomer>();
+builder.Services.AddScoped<IUpdateCustomer,  UpdateCustomer>();
 
 builder.Services.AddRabbitMQ(builder.Configuration);
 builder.Services.Configure<MongoDbConfiguration>(builder.Configuration.GetSection("MongoDB"));
@@ -44,7 +45,20 @@ app.MapPost("/customers", async (CreateCustomerRequest request, ICreateCustomer 
     
     return Results.Ok(customer);
 })
-.WithName("GetCustomer");
+.WithName("CreateCustomer");
+
+app.MapPost("/customers/{Id}", async (Guid id, CustomerRequest request, IUpdateCustomer service, CancellationToken ct) =>
+    {
+
+        var updateCustomerRequest = new UpdateCustomerRequest(id)
+        {
+            FullName = request.FullName,
+        };
+        var customer = await service.ExecuteAsync(updateCustomerRequest, ct);
+    
+        return Results.Ok(customer);
+    })
+    .WithName("UpdateCustomer");
 
 app.Run();
 
