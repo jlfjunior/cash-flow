@@ -2,19 +2,23 @@ using CashFlow.Lib.EventBus;
 using CashFlow.Transaction.Api.Domain.Entities;
 using CashFlow.Transaction.Api.Domain.Events;
 using CashFlow.Transaction.Api.Infrastructure;
-using CashFlow.Transaction.Api.Sharable.Responses;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace CashFlow.Transaction.Api.Domain.Services;
+namespace CashFlow.Transaction.Api.Application;
 
-public class AccountService : IAccountService
+public interface ICreateAccount
 {
-    private readonly ILogger<AccountService> _logger;
+    Task ExecuteAsync(Guid customerId);
+}
+
+public class CreateAccount : ICreateAccount
+{
+    private readonly ILogger<CreateAccount> _logger;
     private readonly IMongoCollection<Account> _accounts;
     private readonly IEventBus _eventBus;
 
-    public AccountService(ILogger<AccountService> logger, IEventBus eventBus, IOptions<MongoDbConfiguration> mongoOptions)
+    public CreateAccount(ILogger<CreateAccount> logger, IEventBus eventBus, IOptions<MongoDbConfiguration> mongoOptions)
     {
         _logger = logger;
         _eventBus = eventBus;
@@ -27,7 +31,7 @@ public class AccountService : IAccountService
         _accounts = database.GetCollection<Account>("accounts");
     }
     
-    public async Task CreateAsync(Guid customerId)
+    public async Task ExecuteAsync(Guid customerId)
     {
         var account = new Account(customerId);
         

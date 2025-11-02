@@ -18,6 +18,8 @@ public class Account : Entity
         Balance = decimal.Zero;
     }
 
+    public void AddTransaction(string direction, decimal amount) { }
+    
     public void AddDebit(decimal amount)
     {
         if (Balance < amount) 
@@ -38,7 +40,7 @@ public class Account : Entity
             transaction.ReferenceDate,
             transaction.Value);
         
-        var balanceEvent = new BalanceUpdated(Id, transactionEventCreated.ReferenceDate, Balance);
+        var balanceEvent = new AccountUpdated(Id, transactionEventCreated.ReferenceDate, Balance, transactionEventCreated);
         
         AddEvent(transactionEventCreated);
         AddEvent(balanceEvent);
@@ -54,7 +56,5 @@ public class Account : Entity
         
         Transactions.Add(transaction);
         Balance += amount;
-        
-        
     }
 }

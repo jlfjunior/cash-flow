@@ -1,3 +1,3 @@
-namespace CashFlow.Transaction.Api.Sharable.Requests;
+namespace CashFlow.Transaction.Api.Application.Requests;
 
 public record CreditTransactionRequest(Guid AccountId, decimal Value);
