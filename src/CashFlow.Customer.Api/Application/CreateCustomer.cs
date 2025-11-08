@@ -1,10 +1,8 @@
 using CashFlow.Customer.Api.Application.Requests;
 using CashFlow.Customer.Api.Application.Responses;
 using CashFlow.Customer.Api.Domain.Events;
-using CashFlow.Customer.Api.Infrastructure;
+using CashFlow.Customer.Api.Domain.Repositories;
 using CashFlow.Lib.EventBus;
-using Microsoft.Extensions.Options;
-using MongoDB.Driver;
 
 namespace CashFlow.Customer.Api.Application;
 
@@ -16,28 +14,21 @@ public interface ICreateCustomer
 public class CreateCustomer : ICreateCustomer
 {
     private readonly ILogger<CreateCustomer> _logger;
-    private readonly IMongoCollection<Domain.Customer> _customers;
+    private readonly ICustomerRepository _customerRepository;
     private readonly IEventBus _eventBus;
 
-    public CreateCustomer(ILogger<CreateCustomer> logger, IOptions<MongoDbConfiguration> mongoOptions, IEventBus eventBus)
+    public CreateCustomer(ILogger<CreateCustomer> logger, ICustomerRepository customerRepository, IEventBus eventBus)
     {
         _logger = logger;
+        _customerRepository = customerRepository;
         _eventBus = eventBus;
-        
-        var config = mongoOptions.Value;
-        var connectionString =
-            $"mongodb://{config.Username}:{config.Password}@{config.Host}:{config.Port}/{config.Database}?authSource={config.Username}";
-
-        var client = new MongoClient(connectionString);
-        var database = client.GetDatabase(config.Database);
-        _customers = database.GetCollection<Domain.Customer>("customers");
     }
     
-    public async Task<CreateCustomerResponse> ExecuteAsync(CreateCustomerRequest request, CancellationToken ct)
+    public async Task<CreateCustomerResponse> ExecuteAsync(CreateCustomerRequest request, CancellationToken token)
     {
-        var customer = new Domain.Customer(request.FullName);
+        var customer = new Domain.Entities.Customer(request.FullName);
         
-        await _customers.InsertOneAsync(customer, cancellationToken: ct);
+        await _customerRepository.UpsertAsync(customer, token);
 
         var customerEvent = new CustomerCreated(customer.Id, request.FullName);
         

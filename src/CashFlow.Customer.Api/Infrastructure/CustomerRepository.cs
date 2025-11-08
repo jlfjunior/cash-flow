@@ -1,4 +1,3 @@
-using CashFlow.Customer.Api.Application;
 using CashFlow.Customer.Api.Application.Responses;
 using CashFlow.Customer.Api.Domain.Repositories;
 using Microsoft.Extensions.Options;
@@ -8,7 +7,7 @@ namespace CashFlow.Customer.Api.Infrastructure;
 
 public class CustomerRepository : ICustomerRepository
 {
-    private readonly IMongoCollection<Domain.Customer> _customers;
+    private readonly IMongoCollection<Domain.Entities.Customer> _customers;
 
     public CustomerRepository(IOptions<MongoDbConfiguration> mongoOptions)
     {
@@ -18,13 +17,32 @@ public class CustomerRepository : ICustomerRepository
 
         var client = new MongoClient(connectionString);
         var database = client.GetDatabase(config.Database);
-        _customers = database.GetCollection<Domain.Customer>("customers");
+        _customers = database.GetCollection<Domain.Entities.Customer>("customers");
+    }
+
+    public async Task UpsertAsync(Domain.Entities.Customer customer, CancellationToken token)
+    {
+        await _customers.ReplaceOneAsync(
+            x => x.Id == customer.Id,
+            customer,
+            new ReplaceOptions { IsUpsert = true },
+            token
+        );
+    }
+
+    public async Task<Domain.Entities.Customer> GetByIdAsync(Guid id)
+    {
+        var customer = await _customers
+            .Find(x => x.Id == id)
+            .FirstOrDefaultAsync();
+
+        return customer;
     }
 
     public async Task<IEnumerable<CreateCustomerResponse>> SearchAsync()
     {
         var customers = await _customers
-            .Find(Builders<Domain.Customer>.Filter.Empty)
+            .Find(Builders<Domain.Entities.Customer>.Filter.Empty)
             .Project(t => new CreateCustomerResponse(t.Id, t.FullName))
             .ToListAsync();
 
