@@ -1,5 +1,5 @@
+using CashFlow.Consolidation.Api.Application;
 using CashFlow.Consolidation.Api.Infrastructure;
-using CashFlow.Consolidation.Api.Sharable;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 

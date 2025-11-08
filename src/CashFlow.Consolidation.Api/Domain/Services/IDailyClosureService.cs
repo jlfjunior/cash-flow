@@ -1,4 +1,4 @@
-using CashFlow.Consolidation.Api.Sharable;
+using CashFlow.Consolidation.Api.Application;
 
 namespace CashFlow.Consolidation.Api.Domain.Services;
 

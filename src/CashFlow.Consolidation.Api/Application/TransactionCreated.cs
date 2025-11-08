@@ -1,4 +1,4 @@
-namespace CashFlow.Consolidation.Api.Sharable;
+namespace CashFlow.Consolidation.Api.Application;
 
 public record TransactionCreated
 {

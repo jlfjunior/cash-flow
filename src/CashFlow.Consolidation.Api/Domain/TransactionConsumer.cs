@@ -1,5 +1,5 @@
+using CashFlow.Consolidation.Api.Application;
 using CashFlow.Consolidation.Api.Domain.Services;
-using CashFlow.Consolidation.Api.Sharable;
 using CashFlow.Lib.EventBus;
 
 namespace CashFlow.Consolidation.Api.Domain;
