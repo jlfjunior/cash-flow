@@ -25,7 +25,7 @@ public class CustomerRepository : ICustomerRepository
         await _customers.ReplaceOneAsync(
             x => x.Id == customer.Id,
             customer,
-            new ReplaceOptions { IsUpsert = true },
+            new ReplaceOptions { IsUpsert = false },
             token
         );
     }

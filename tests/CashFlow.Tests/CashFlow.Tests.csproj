@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\CashFlow.Customer.Api\CashFlow.Customer.Api.csproj" />
       <ProjectReference Include="..\..\src\CashFlow.Transaction.Api\CashFlow.Transaction.Api.csproj" />
     </ItemGroup>
 

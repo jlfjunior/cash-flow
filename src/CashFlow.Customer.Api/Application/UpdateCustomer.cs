@@ -26,7 +26,10 @@ public class UpdateCustomer : IUpdateCustomer
     public async Task<UpdateCustomerResponse> ExecuteAsync(UpdateCustomerRequest request, CancellationToken token)
     {
         var customer = await _customerRepository.GetByIdAsync(request.Id);
-
+        
+        if (customer is null)
+            throw new Exception("Customer not found");
+        
         customer.WithFullName(request.FullName);
 
         await _customerRepository.UpsertAsync(customer, token);
