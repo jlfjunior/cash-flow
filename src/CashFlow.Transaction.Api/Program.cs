@@ -12,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 // Register application services
+builder.Services.AddHostedService<CustomerCreatedConsumer>();
+
 builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<ICreateAccount, CreateAccount>();
 builder.Services.AddScoped<ICreateTransaction, CreateTransaction>();
