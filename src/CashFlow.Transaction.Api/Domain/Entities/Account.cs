@@ -6,6 +6,7 @@ namespace CashFlow.Transaction.Api.Domain.Entities;
 public class Account : Entity
 {
     public Guid Id { get; private set; }
+    public int Version { get; private set; }
     public Guid CustomerId { get; private set; }
     public decimal Balance { get; private set; }
     
@@ -14,6 +15,7 @@ public class Account : Entity
     public Account(Guid customerId)
     {
         Id = Guid.NewGuid();
+        Version = 1;
         CustomerId = customerId;
         Balance = decimal.Zero;
     }

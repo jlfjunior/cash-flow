@@ -23,7 +23,7 @@ public static class CreditTransactionEndpoints
         app.MapPost("/transactions/credit",
                 async (CreateTransactionRequest request, ICreateTransaction transactionService) =>
                 {
-                    var transaction = await transactionService.ExecuteAsync(request);
+                    var transaction = await transactionService.ExecuteAsync(request,  CancellationToken.None);
 
                     return Results.Ok(transaction);
                 })

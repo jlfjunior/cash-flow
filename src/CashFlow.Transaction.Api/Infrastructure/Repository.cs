@@ -20,6 +20,26 @@ public class Repository : IRepository
         _accounts = database.GetCollection<Account>("accounts");
     }
     
+    
+    public async Task UpsertAsync(Account account, CancellationToken token)
+    {
+        await _accounts.ReplaceOneAsync(
+            x => x.Id == account.Id,
+            account,
+            new ReplaceOptions { IsUpsert = true },
+            token
+        );
+    }
+    
+    public async Task<Account> GetByIdAsync(Guid id)
+    {
+        var account = await _accounts
+            .Find(x => x.Id == id)
+            .FirstOrDefaultAsync();
+
+        return account;
+    }
+    
     public async Task<List<AccountResponse>> SearchAsync(Guid? accountId = null)
     {
         var accounts = await _accounts

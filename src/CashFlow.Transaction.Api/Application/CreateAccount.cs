@@ -1,41 +1,33 @@
 using CashFlow.Lib.EventBus;
 using CashFlow.Transaction.Api.Domain.Entities;
 using CashFlow.Transaction.Api.Domain.Events;
-using CashFlow.Transaction.Api.Infrastructure;
-using Microsoft.Extensions.Options;
-using MongoDB.Driver;
+using CashFlow.Transaction.Api.Domain.Repositories;
 
 namespace CashFlow.Transaction.Api.Application;
 
 public interface ICreateAccount
 {
-    Task ExecuteAsync(Guid customerId);
+    Task ExecuteAsync(Guid customerId, CancellationToken token);
 }
 
 public class CreateAccount : ICreateAccount
 {
     private readonly ILogger<CreateAccount> _logger;
-    private readonly IMongoCollection<Account> _accounts;
+    private readonly IRepository _accountRepository;
     private readonly IEventBus _eventBus;
 
-    public CreateAccount(ILogger<CreateAccount> logger, IEventBus eventBus, IOptions<MongoDbConfiguration> mongoOptions)
+    public CreateAccount(ILogger<CreateAccount> logger, IRepository accountRepository, IEventBus eventBus)
     {
         _logger = logger;
+        _accountRepository = accountRepository;
         _eventBus = eventBus;
-        
-        var config = mongoOptions.Value;
-        var connectionString = $"mongodb://{config.Username}:{config.Password}@{config.Host}:{config.Port}/{config.Database}?authSource={config.Username}";
-
-        var client = new MongoClient(connectionString);
-        var database = client.GetDatabase(config.Database);
-        _accounts = database.GetCollection<Account>("accounts");
     }
     
-    public async Task ExecuteAsync(Guid customerId)
+    public async Task ExecuteAsync(Guid customerId, CancellationToken token)
     {
         var account = new Account(customerId);
         
-        _accounts.InsertOne(account);
+        await _accountRepository.UpsertAsync(account, token);
         
         var @event = new AccountCreated(account.Id, account.CustomerId);
         
