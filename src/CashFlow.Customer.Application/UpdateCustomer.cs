@@ -1,5 +1,6 @@
 using CashFlow.Customer.Application.Requests;
 using CashFlow.Customer.Application.Responses;
+using CashFlow.Customer.Domain.Events;
 using CashFlow.Customer.Domain.Repositories;
 using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
@@ -32,10 +33,12 @@ public class UpdateCustomer : IUpdateCustomer
             throw new Exception("Customer not found");
         
         customer.WithFullName(request.FullName);
+        
+        var customerEvent = new CustomerUpdated(customer.Id, request.FullName);
 
         await _customerRepository.UpsertAsync(customer, token);
         
-        await _eventBus.PublishAsync(customer, "queuing.customers.updated");
+        await _eventBus.PublishAsync(customerEvent, "queuing.customers.updated");
         
         _logger.LogInformation("Updated customer. Id: {Id}", customer.Id);
         
