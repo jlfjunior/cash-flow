@@ -1,10 +1,11 @@
-using CashFlow.Customer.Api.Application.Requests;
-using CashFlow.Customer.Api.Application.Responses;
-using CashFlow.Customer.Api.Domain.Events;
-using CashFlow.Customer.Api.Domain.Repositories;
+using CashFlow.Customer.Domain.Events;
+using CashFlow.Customer.Application.Requests;
+using CashFlow.Customer.Application.Responses;
+using CashFlow.Customer.Domain.Repositories;
 using CashFlow.Lib.EventBus;
+using Microsoft.Extensions.Logging;
 
-namespace CashFlow.Customer.Api.Application;
+namespace CashFlow.Customer.Application;
 
 public interface ICreateCustomer
 {

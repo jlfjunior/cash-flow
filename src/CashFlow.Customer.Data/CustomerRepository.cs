@@ -1,9 +1,8 @@
-using CashFlow.Customer.Api.Application.Responses;
-using CashFlow.Customer.Api.Domain.Repositories;
+using CashFlow.Customer.Domain.Repositories;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace CashFlow.Customer.Api.Infrastructure;
+namespace CashFlow.Customer.Data;
 
 public class CustomerRepository : ICustomerRepository
 {
@@ -39,11 +38,10 @@ public class CustomerRepository : ICustomerRepository
         return customer;
     }
 
-    public async Task<IEnumerable<CreateCustomerResponse>> SearchAsync()
+    public async Task<IEnumerable<Domain.Entities.Customer>> SearchAsync()
     {
         var customers = await _customers
             .Find(Builders<Domain.Entities.Customer>.Filter.Empty)
-            .Project(t => new CreateCustomerResponse(t.Id, t.FullName))
             .ToListAsync();
 
         return customers;

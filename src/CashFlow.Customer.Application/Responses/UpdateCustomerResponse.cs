@@ -1,3 +1,3 @@
-namespace CashFlow.Customer.Api.Application.Responses;
+namespace CashFlow.Customer.Application.Responses;
 
 public record UpdateCustomerResponse(Guid Id, string FullName);

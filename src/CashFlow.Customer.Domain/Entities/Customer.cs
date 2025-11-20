@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace CashFlow.Customer.Api.Domain.Entities;
+namespace CashFlow.Customer.Domain.Entities;
 
 public class Customer
 {

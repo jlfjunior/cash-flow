@@ -1,8 +1,8 @@
-using CashFlow.Customer.Api.Application;
-using CashFlow.Customer.Api.Application.Requests;
-using CashFlow.Customer.Api.Application.Responses;
-using CashFlow.Customer.Api.Domain.Repositories;
-using CashFlow.Customer.Api.Infrastructure;
+using CashFlow.Customer.Application;
+using CashFlow.Customer.Application.Requests;
+using CashFlow.Customer.Application.Responses;
+using CashFlow.Customer.Data;
+using CashFlow.Customer.Domain.Repositories;
 using CashFlow.Lib.EventBus;
 using Scalar.AspNetCore;
 

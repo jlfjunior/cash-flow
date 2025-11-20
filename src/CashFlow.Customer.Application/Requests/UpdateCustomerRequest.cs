@@ -1,3 +1,3 @@
-namespace CashFlow.Customer.Api.Application.Requests;
+namespace CashFlow.Customer.Application.Requests;
 
 public record UpdateCustomerRequest(Guid Id) : CustomerRequest;

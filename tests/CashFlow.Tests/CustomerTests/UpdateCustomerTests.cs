@@ -1,6 +1,6 @@
-using CashFlow.Customer.Api.Application;
-using CashFlow.Customer.Api.Application.Requests;
-using CashFlow.Customer.Api.Domain.Repositories;
+using CashFlow.Customer.Application;
+using CashFlow.Customer.Application.Requests;
+using CashFlow.Customer.Domain.Repositories;
 using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -12,7 +12,7 @@ public class UpdateCustomerTests
     [Fact]
     public async Task UpdateCustomer_SuccessAsync()
     {
-        var customer = new Customer.Api.Domain.Entities.Customer("Doe");
+        var customer = new Customer.Domain.Entities.Customer("Doe");
         
         var request = new UpdateCustomerRequest(customer.Id)
         {
