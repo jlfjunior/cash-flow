@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Transaction.Api", "src\CashFlow.Transaction.Api\CashFlow.Transaction.Api.csproj", "{7725F0AA-F040-43B4-995D-A21759B3494B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Customer.Tests", "tests\CashFlow.Customer.Tests\CashFlow.Customer.Tests.csproj", "{33907D2F-D09D-47C4-B620-7D52C8DF947F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Customers.Tests", "tests\CashFlow.Customers.Tests\CashFlow.Customers.Tests.csproj", "{33907D2F-D09D-47C4-B620-7D52C8DF947F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F430418C-DA65-43B2-A973-2EA966ED645C}"
 EndProject
@@ -17,15 +17,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Consolidation.Api"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Lib.EventBus", "src\CashFlow.Lib.EventBus\CashFlow.Lib.EventBus.csproj", "{F0E00609-225E-4E91-98AF-520E28199423}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Customer.Api", "src\CashFlow.Customer.Api\CashFlow.Customer.Api.csproj", "{E1C5FECF-98D0-4C40-8EBE-E89A457E619B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Customers.Api", "src\CashFlow.Customers.Api\CashFlow.Customers.Api.csproj", "{E1C5FECF-98D0-4C40-8EBE-E89A457E619B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomerManagement", "CustomerManagement", "{9A2C27BA-B0F7-4107-B849-645F96997B36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Customer.Domain", "src\CashFlow.Customer.Domain\CashFlow.Customer.Domain.csproj", "{6562A34E-E975-4F5C-8F80-00067039A4DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Customers.Domain", "src\CashFlow.Customers.Domain\CashFlow.Customers.Domain.csproj", "{6562A34E-E975-4F5C-8F80-00067039A4DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Customer.Application", "src\CashFlow.Customer.Application\CashFlow.Customer.Application.csproj", "{150EAB0D-ACE5-48D1-9EFC-E06E8BA99B08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Customers.Application", "src\CashFlow.Customers.Application\CashFlow.Customers.Application.csproj", "{150EAB0D-ACE5-48D1-9EFC-E06E8BA99B08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Customer.Data", "src\CashFlow.Customer.Data\CashFlow.Customer.Data.csproj", "{B3393620-21F3-4F2D-A0A0-C211D259BA29}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Customers.Data", "src\CashFlow.Customers.Data\CashFlow.Customers.Data.csproj", "{B3393620-21F3-4F2D-A0A0-C211D259BA29}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.AppHost", "src\CashFlow.AppHost\CashFlow.AppHost.csproj", "{E21B83CE-2216-4EE2-955B-F98E3FE5A850}"
 EndProject
