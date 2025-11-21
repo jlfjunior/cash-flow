@@ -1,6 +1,6 @@
-using CashFlow.Transaction.Api.Application;
-using CashFlow.Transaction.Api.Application.Requests;
-using CashFlow.Transaction.Api.Domain.Repositories;
+using CashFlow.Transaction.Application;
+using CashFlow.Transaction.Application.Requests;
+using CashFlow.Transaction.Domain.Repositories;
 
 namespace CashFlow.Transaction.Api.Endpoints;
 

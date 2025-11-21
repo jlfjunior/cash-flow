@@ -1,7 +1,8 @@
-namespace CashFlow.Consolidation.Api.Domain;
-
-public enum Direction
+namespace CashFlow.Consolidation.Api.Domain
 {
-    Credit = 10,
-    Debit = 20,
+    public enum Direction
+    {
+        Credit = 10,
+        Debit = 20,
+    }
 }

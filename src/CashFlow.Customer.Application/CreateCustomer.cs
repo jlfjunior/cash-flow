@@ -15,13 +15,13 @@ public interface ICreateCustomer
 public class CreateCustomer : ICreateCustomer
 {
     private readonly ILogger<CreateCustomer> _logger;
-    private readonly ICustomerRepository _customerRepository;
+    private readonly IRepository _repository;
     private readonly IEventBus _eventBus;
 
-    public CreateCustomer(ILogger<CreateCustomer> logger, ICustomerRepository customerRepository, IEventBus eventBus)
+    public CreateCustomer(ILogger<CreateCustomer> logger, IRepository repository, IEventBus eventBus)
     {
         _logger = logger;
-        _customerRepository = customerRepository;
+        _repository = repository;
         _eventBus = eventBus;
     }
     
@@ -29,7 +29,7 @@ public class CreateCustomer : ICreateCustomer
     {
         var customer = new Domain.Entities.Customer(request.FullName);
         
-        await _customerRepository.UpsertAsync(customer, token);
+        await _repository.UpsertAsync(customer, token);
 
         var customerEvent = new CustomerCreated(customer.Id, request.FullName);
         

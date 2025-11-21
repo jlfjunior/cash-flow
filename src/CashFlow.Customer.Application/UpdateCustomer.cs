@@ -15,19 +15,19 @@ public interface IUpdateCustomer
 public class UpdateCustomer : IUpdateCustomer
 {
     private readonly ILogger<UpdateCustomer> _logger;
-    private readonly ICustomerRepository _customerRepository;
+    private readonly IRepository _repository;
     private readonly IEventBus _eventBus;
 
-    public UpdateCustomer(ILogger<UpdateCustomer> logger, ICustomerRepository customerRepository, IEventBus eventBus)
+    public UpdateCustomer(ILogger<UpdateCustomer> logger, IRepository repository, IEventBus eventBus)
     {
         _logger = logger;
-        _customerRepository = customerRepository;
+        _repository = repository;
         _eventBus = eventBus;
     }
     
     public async Task<UpdateCustomerResponse> ExecuteAsync(UpdateCustomerRequest request, CancellationToken token)
     {
-        var customer = await _customerRepository.GetByIdAsync(request.Id);
+        var customer = await _repository.GetByIdAsync(request.Id);
         
         if (customer is null)
             throw new Exception("Customer not found");
@@ -36,7 +36,7 @@ public class UpdateCustomer : IUpdateCustomer
         
         var customerEvent = new CustomerUpdated(customer.Id, request.FullName);
 
-        await _customerRepository.UpsertAsync(customer, token);
+        await _repository.UpsertAsync(customer, token);
         
         await _eventBus.PublishAsync(customerEvent, "queuing.customers.updated");
         

@@ -5,28 +5,29 @@ using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 
-namespace CashFlow.Tests.CustomerTests;
-
-public class CreateCustomerTests
+namespace CashFlow.Tests.CustomerTests
 {
-    [Fact]
-    public async Task CreateNewCustomer()
+    public class CreateCustomerTests
     {
-        var request = new CreateCustomerRequest
+        [Fact]
+        public async Task CreateNewCustomer()
         {
-            FullName = "John Doe",
-        };
+            var request = new CreateCustomerRequest
+            {
+                FullName = "John Doe",
+            };
         
-        var logger = Substitute.For<ILogger<CreateCustomer>>();
-        var repository = Substitute.For<ICustomerRepository>();
-        var eventBus = Substitute.For<IEventBus>();
+            var logger = Substitute.For<ILogger<CreateCustomer>>();
+            var repository = Substitute.For<IRepository>();
+            var eventBus = Substitute.For<IEventBus>();
         
-        var createCustomer = new CreateCustomer(logger, repository, eventBus);
+            var createCustomer = new CreateCustomer(logger, repository, eventBus);
 
-        var customer = await createCustomer.ExecuteAsync(request, CancellationToken.None);
+            var customer = await createCustomer.ExecuteAsync(request, CancellationToken.None);
         
-        Assert.Equal("John Doe", customer.FullName);
+            Assert.Equal("John Doe", customer.FullName);
         
-        repository.Received(1);
+            repository.Received(1);
+        }
     }
 }

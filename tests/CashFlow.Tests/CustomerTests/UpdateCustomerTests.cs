@@ -20,7 +20,7 @@ public class UpdateCustomerTests
         };
         
         var logger = Substitute.For<ILogger<UpdateCustomer>>();
-        var repository = Substitute.For<ICustomerRepository>();
+        var repository = Substitute.For<IRepository>();
         var eventBus = Substitute.For<IEventBus>();
         
         repository.GetByIdAsync(customer.Id).Returns(customer);
@@ -44,7 +44,7 @@ public class UpdateCustomerTests
         };
         
         var logger = Substitute.For<ILogger<UpdateCustomer>>();
-        var repository = Substitute.For<ICustomerRepository>();
+        var repository = Substitute.For<IRepository>();
         var eventBus = Substitute.For<IEventBus>();
         
         var updateCustomer = new UpdateCustomer(logger, repository, eventBus);

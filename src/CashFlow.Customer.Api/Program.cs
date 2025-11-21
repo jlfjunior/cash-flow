@@ -4,6 +4,7 @@ using CashFlow.Customer.Application.Responses;
 using CashFlow.Customer.Data;
 using CashFlow.Customer.Domain.Repositories;
 using CashFlow.Lib.EventBus;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,13 +13,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddScoped<ICustomerRepository,  CustomerRepository>();
+builder.Services.AddDbContext<CustomerContext>(options => options.UseNpgsql(connectionString: builder.Configuration.GetConnectionString("CustomerContext")));
+builder.Services.AddScoped<IRepository,  Repository>();
 builder.Services.AddScoped<ICreateCustomer,  CreateCustomer>();
 builder.Services.AddScoped<IUpdateCustomer,  UpdateCustomer>();
 
 builder.Services.AddRabbitMQ(builder.Configuration);
-builder.Services.Configure<MongoDbConfiguration>(builder.Configuration.GetSection("MongoDB"));
-
 
 var app = builder.Build();
 

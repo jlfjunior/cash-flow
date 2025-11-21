@@ -1,8 +1,9 @@
 using CashFlow.Lib.EventBus;
-using CashFlow.Transaction.Api.Application;
-using CashFlow.Transaction.Api.Domain.Repositories;
+using CashFlow.Transaction.Api;
+using CashFlow.Transaction.Application;
+using CashFlow.Transaction.Domain.Repositories;
 using CashFlow.Transaction.Api.Endpoints;
-using CashFlow.Transaction.Api.Infrastructure;
+using CashFlow.Transaction.Data;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
