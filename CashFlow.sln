@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Transaction.Api", "src\CashFlow.Transaction.Api\CashFlow.Transaction.Api.csproj", "{7725F0AA-F040-43B4-995D-A21759B3494B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Tests", "tests\CashFlow.Tests\CashFlow.Tests.csproj", "{33907D2F-D09D-47C4-B620-7D52C8DF947F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlow.Customer.Tests", "tests\CashFlow.Customer.Tests\CashFlow.Customer.Tests.csproj", "{33907D2F-D09D-47C4-B620-7D52C8DF947F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F430418C-DA65-43B2-A973-2EA966ED645C}"
 EndProject

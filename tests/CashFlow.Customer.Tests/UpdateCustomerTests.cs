@@ -5,7 +5,7 @@ using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 
-namespace CashFlow.Tests.CustomerTests;
+namespace CashFlow.Customer.Tests;
 
 public class UpdateCustomerTests
 {
