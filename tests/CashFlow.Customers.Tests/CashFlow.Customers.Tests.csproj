@@ -24,7 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\CashFlow.Customers.Api\CashFlow.Customers.Api.csproj" />
-      <ProjectReference Include="..\..\src\CashFlow.Transaction.Api\CashFlow.Transaction.Api.csproj" />
+      <ProjectReference Include="..\..\src\CashFlow.Transactions.Api\CashFlow.Transactions.Api.csproj" />
     </ItemGroup>
 
     <ItemGroup>
