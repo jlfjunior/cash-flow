@@ -4,21 +4,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CashFlow.Customers.Data;
 
-public class Repository : IRepository
+public class Repository(CustomerContext context) : IRepository
 {
-    private readonly CustomerContext _context;
-    
-    public Repository(CustomerContext context) => _context = context;
-
     public async Task UpsertAsync(Customer customer, CancellationToken token)
     {
-        
-        
+        context.Customers.Add(customer);
+        await context.SaveChangesAsync(token);
     }
 
     public async Task<Customer> GetByIdAsync(Guid id)
     {
-        var customer = await _context.Customers
+        var customer = await context.Customers
             .FirstOrDefaultAsync(x => x.Id == id);
 
         return customer;
@@ -26,7 +22,7 @@ public class Repository : IRepository
 
     public async Task<IEnumerable<Customer>> SearchAsync()
     {
-        var customers = await _context.Customers
+        var customers = await context.Customers
             .ToListAsync();
 
         return customers;

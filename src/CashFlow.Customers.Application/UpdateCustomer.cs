@@ -7,27 +7,11 @@ using Microsoft.Extensions.Logging;
 
 namespace CashFlow.Customers.Application;
 
-public interface IUpdateCustomer
+public class UpdateCustomer(ILogger<UpdateCustomer> logger, IRepository repository, IEventBus eventBus) : IUpdateCustomer
 {
-    Task<UpdateCustomerResponse> ExecuteAsync(UpdateCustomerRequest request,  CancellationToken token);
-}
-
-public class UpdateCustomer : IUpdateCustomer
-{
-    private readonly ILogger<UpdateCustomer> _logger;
-    private readonly IRepository _repository;
-    private readonly IEventBus _eventBus;
-
-    public UpdateCustomer(ILogger<UpdateCustomer> logger, IRepository repository, IEventBus eventBus)
-    {
-        _logger = logger;
-        _repository = repository;
-        _eventBus = eventBus;
-    }
-    
     public async Task<UpdateCustomerResponse> ExecuteAsync(UpdateCustomerRequest request, CancellationToken token)
     {
-        var customer = await _repository.GetByIdAsync(request.Id);
+        var customer = await repository.GetByIdAsync(request.Id);
         
         if (customer is null)
             throw new Exception("Customer not found");
@@ -36,11 +20,11 @@ public class UpdateCustomer : IUpdateCustomer
         
         var customerEvent = new CustomerUpdated(customer.Id, request.FullName);
 
-        await _repository.UpsertAsync(customer, token);
+        await repository.UpsertAsync(customer, token);
         
-        await _eventBus.PublishAsync(customerEvent, "queuing.customers.updated");
+        await eventBus.PublishAsync(customerEvent, "queuing.customers.updated");
         
-        _logger.LogInformation("Updated customer. Id: {Id}", customer.Id);
+        logger.LogInformation("Updated customer. Id: {Id}", customer.Id);
         
         return new UpdateCustomerResponse(customer.Id,  customer.FullName);
     }

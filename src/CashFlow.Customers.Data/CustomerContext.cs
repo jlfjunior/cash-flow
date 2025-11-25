@@ -1,3 +1,5 @@
+using CashFlow.Customers.Data.Configurations;
+using CashFlow.Customers.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CashFlow.Customers.Data;
@@ -10,5 +12,11 @@ public class CustomerContext : DbContext
         
     }
     
-    public DbSet<Customers.Domain.Entities.Customer>  Customers { get; set; }
+    public DbSet<Customer>  Customers { get; set; }
+
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+    }
 }

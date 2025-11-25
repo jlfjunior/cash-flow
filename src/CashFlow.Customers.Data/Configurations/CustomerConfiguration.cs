@@ -1,11 +1,12 @@
+using CashFlow.Customers.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CashFlow.Customers.Data;
+namespace CashFlow.Customers.Data.Configurations;
 
-public class CustomerConfiguration : IEntityTypeConfiguration<Customers.Domain.Entities.Customer>
+public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
 {
-    public void Configure(EntityTypeBuilder<Customers.Domain.Entities.Customer> builder)
+    public void Configure(EntityTypeBuilder<Customer> builder)
     {
         builder.ToTable("Customers");
         
