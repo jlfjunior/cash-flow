@@ -20,7 +20,6 @@ builder.Services.AddScoped<ICreateAccount, CreateAccount>();
 builder.Services.AddScoped<ICreateTransaction, CreateTransaction>();
 
 builder.Services.AddRabbitMQ(builder.Configuration);
-builder.Services.Configure<MongoDbConfiguration>(builder.Configuration.GetSection("MongoDB"));
 
 var app = builder.Build();
 

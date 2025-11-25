@@ -6,31 +6,21 @@ using Microsoft.Extensions.Logging;
 
 namespace CashFlow.Transactions.Application;
 
-public class CreateAccount : ICreateAccount
+public class CreateAccount(ILogger<CreateAccount> logger, IRepository accountRepository, IEventBus eventBus)
+    : ICreateAccount
 {
-    private readonly ILogger<CreateAccount> _logger;
-    private readonly IRepository _accountRepository;
-    private readonly IEventBus _eventBus;
-
-    public CreateAccount(ILogger<CreateAccount> logger, IRepository accountRepository, IEventBus eventBus)
-    {
-        _logger = logger;
-        _accountRepository = accountRepository;
-        _eventBus = eventBus;
-    }
-    
     public async Task ExecuteAsync(Guid customerId, CancellationToken token)
     {
         var account = new Account(customerId);
         
-        await _accountRepository.UpsertAsync(account, token);
+        await accountRepository.UpsertAsync(account, token);
         
         var @event = new AccountCreated(account.Id, account.CustomerId);
         
         account.AddEvent(@event);
         
-        await _eventBus.PublishAsync(@event, "account.created");
+        await eventBus.PublishAsync(@event, "account.created");
         
-        _logger.LogInformation($"Account created for customer: {customerId}");
+        logger.LogInformation($"Account created for customer: {customerId}");
     }
 }
