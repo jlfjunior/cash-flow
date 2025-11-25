@@ -6,11 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace CashFlow.Transactions.Application;
 
-public interface ICreateAccount
-{
-    Task ExecuteAsync(Guid customerId, CancellationToken token);
-}
-
 public class CreateAccount : ICreateAccount
 {
     private readonly ILogger<CreateAccount> _logger;

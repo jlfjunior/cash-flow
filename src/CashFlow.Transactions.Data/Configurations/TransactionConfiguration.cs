@@ -1,12 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CashFlow.Transaction.Api.Infrastructure.Data;
+namespace CashFlow.Transactions.Data.Configurations;
 
-public class TransactionConfiguration : IEntityTypeConfiguration<Transactions.Domain.Entities.Transaction>
+public class TransactionConfiguration : IEntityTypeConfiguration<Domain.Entities.Transaction>
 {
-    public void Configure(EntityTypeBuilder<Transactions.Domain.Entities.Transaction> builder)
+    public void Configure(EntityTypeBuilder<Domain.Entities.Transaction> builder)
     {
+        builder.ToTable("Transactions");
+        
         builder.HasKey(x => x.Id);
         
         builder.Property(x => x.AccountId);
