@@ -4,7 +4,7 @@ using CashFlow.Transactions.Domain.Repositories;
 
 namespace CashFlow.Transactions.Api.Endpoints;
 
-public static class CreditTransactionEndpoints
+public static class TransactionEndpoints
 {
     public static void MapTransactionEndpoints(this WebApplication app)
     {

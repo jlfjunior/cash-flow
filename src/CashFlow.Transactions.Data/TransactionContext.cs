@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CashFlow.Transactions.Data;
 
-public class TransactionContext : DbContext
+public class TransactionContext(DbContextOptions<TransactionContext> options) : DbContext(options)
 {
     public DbSet<Account> Accounts { get; set; }
 }

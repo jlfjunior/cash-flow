@@ -4,14 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CashFlow.Customers.Data;
 
-public class CustomerContext : DbContext
+public class CustomerContext(DbContextOptions<CustomerContext> options) : DbContext(options)
 {
-    public CustomerContext(DbContextOptions<CustomerContext> options)
-    : base(options)
-    {
-        
-    }
-    
     public DbSet<Customer>  Customers { get; set; }
 
 

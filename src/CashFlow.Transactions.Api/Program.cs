@@ -4,6 +4,7 @@ using CashFlow.Transactions.Application;
 using CashFlow.Transactions.Api.Endpoints;
 using CashFlow.Transactions.Data;
 using CashFlow.Transactions.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddDbContext<TransactionContext>(options 
+    => options.UseNpgsql(builder.Configuration.GetConnectionString("TransactionContext")));
 
 // Register application services
 builder.Services.AddHostedService<CustomerCreatedConsumer>();
@@ -33,6 +37,8 @@ if (app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 
 app.MapTransactionEndpoints();
+app.MapAccountEndpoints();
+
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.Run();
 
