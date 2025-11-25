@@ -1,5 +1,4 @@
 using CashFlow.Lib.EventBus;
-using CashFlow.Transactions.Api;
 using CashFlow.Transactions.Application;
 using CashFlow.Transactions.Api.Endpoints;
 using CashFlow.Transactions.Data;
@@ -17,8 +16,6 @@ builder.Services.AddDbContext<TransactionContext>(options
     => options.UseNpgsql(builder.Configuration.GetConnectionString("TransactionContext")));
 
 // Register application services
-builder.Services.AddHostedService<CustomerCreatedConsumer>();
-
 builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<ICreateAccount, CreateAccount>();
 builder.Services.AddScoped<ICreateTransaction, CreateTransaction>();

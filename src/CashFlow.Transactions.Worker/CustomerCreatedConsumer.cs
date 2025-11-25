@@ -1,8 +1,11 @@
 using CashFlow.Lib.EventBus;
 using CashFlow.Transactions.Application;
 using CashFlow.Transactions.Application.Responses;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-namespace CashFlow.Transactions.Api;
+namespace CashFlow.Transactions.Worker;
 
 public class CustomerCreatedConsumer(
     ILogger<CustomerCreatedConsumer> logger,
@@ -35,3 +38,4 @@ public class CustomerCreatedConsumer(
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 }
+
