@@ -22,7 +22,7 @@ public class Account : Entity
 
     public void AddTransaction(string direction, decimal amount) { }
     
-    public void AddDebit(decimal amount)
+    private void ProcessDebit(decimal amount, TransactionType transactionType)
     {
         if (Balance < amount) 
             throw new InvalidOperationException("Debit amount can't be less than current balance");
@@ -30,7 +30,7 @@ public class Account : Entity
         if (Transactions.IsNull())
             Transactions = new List<Transaction>();
 
-        var transaction = new Transaction(Id, Direction.Debit, amount);
+        var transaction = new Transaction(Id, Direction.Debit, transactionType, amount);
         
         Transactions.Add(transaction);
         Balance -= amount;
@@ -39,6 +39,7 @@ public class Account : Entity
             transaction.Id,
             transaction.AccountId,
             transaction.Direction.ToString(),
+            transaction.TransactionType.ToString(),
             transaction.ReferenceDate,
             transaction.Value);
         
@@ -48,15 +49,25 @@ public class Account : Entity
         AddEvent(balanceEvent);
     }
     
+    public void AddDebit(decimal amount)
+    {
+        ProcessDebit(amount, TransactionType.Withdraw);
+    }
+    
     public void AddCredit(decimal amount)
     {
 
         if (Transactions.IsNull())
             Transactions = new List<Transaction>();
 
-        var transaction = new Transaction(Id, Direction.Credit, amount);
+        var transaction = new Transaction(Id, Direction.Credit, TransactionType.Deposit, amount);
         
         Transactions.Add(transaction);
         Balance += amount;
+    }
+    
+    public void PayBill(decimal amount)
+    {
+        ProcessDebit(amount, TransactionType.BillPayment);
     }
 }

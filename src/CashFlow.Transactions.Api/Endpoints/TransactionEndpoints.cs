@@ -31,5 +31,17 @@ public static class TransactionEndpoints
             .WithDescription("Creates a new credit or debit transaction into an account.")
             .WithTags("Transactions")
             .WithName("AddTransaction");
+
+        app.MapPost("/transactions/pay-bill",
+                async (PayBillRequest request, IPayBill payBillService) =>
+                {
+                    var result = await payBillService.ExecuteAsync(request, CancellationToken.None);
+
+                    return Results.Ok(result);
+                })
+            .WithSummary("Pay bill")
+            .WithDescription("Processes a bill payment (boleto) as a debit transaction. Validates sufficient balance before processing.")
+            .WithTags("Transactions")
+            .WithName("PayBill");
     }
 }

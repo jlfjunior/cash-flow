@@ -15,5 +15,6 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Domain.Entities
         builder.Property(x => x.ReferenceDate);
         builder.Property(x => x.Value);
         builder.Property(x => x.Direction);
+        builder.Property(x => x.TransactionType);
     }
 }

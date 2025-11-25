@@ -22,6 +22,7 @@ builder.Services.AddHostedService<CustomerCreatedConsumer>();
 builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<ICreateAccount, CreateAccount>();
 builder.Services.AddScoped<ICreateTransaction, CreateTransaction>();
+builder.Services.AddScoped<IPayBill, PayBill>();
 
 builder.Services.AddRabbitMQ(builder.Configuration);
 
