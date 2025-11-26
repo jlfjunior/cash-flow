@@ -1,4 +1,5 @@
 using CashFlow.Lib.EventBus;
+using CashFlow.Transactions.Api;
 using CashFlow.Transactions.Application;
 using CashFlow.Transactions.Api.Endpoints;
 using CashFlow.Transactions.Data;

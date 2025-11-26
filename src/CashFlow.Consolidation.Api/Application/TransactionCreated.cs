@@ -1,12 +1,3 @@
-namespace CashFlow.Consolidation.Api.Application
-{
-    public record TransactionCreated
-    {
-        public Guid Id { get; set; }
-        public Guid CustomerId { get; set; }
-        public DateTime ReferenceDate { get; set; }
-        public string Direction { get; set; }
-        public string TransactionType { get; set; }
-        public decimal Value { get; set; }
-    }
-}
+namespace CashFlow.Consolidation.Api.Application;
+
+public record TransactionCreated(Guid Id, Guid CustomerId, DateTime ReferenceDate, string Direction, string TransactionType, decimal Value);
