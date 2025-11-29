@@ -1,4 +1,4 @@
-namespace CashFlow.Consolidation.Api.Domain;
+namespace CashFlow.Consolidation.Domain.Entities;
 
 public class Transaction
 {

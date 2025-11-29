@@ -1,22 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Worker">
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <LangVersion>latest</LangVersion>
+        <UserSecretsId>dotnet-CashFlow.Consolidation.Worker-6267a729-819f-4f59-b0fc-042710dffdb4</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
-        <PackageReference Include="MongoDB.Driver" Version="3.5.2" />
-        <PackageReference Include="Scalar.AspNetCore" Version="2.11.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\CashFlow.Consolidation.Api\CashFlow.Consolidation.Api.csproj" />
       <ProjectReference Include="..\CashFlow.Consolidation.Application\CashFlow.Consolidation.Application.csproj" />
-      <ProjectReference Include="..\CashFlow.Consolidation.Data\CashFlow.Consolidation.Data.csproj" />
-      <ProjectReference Include="..\CashFlow.Lib.Sharable\CashFlow.Lib.Sharable.csproj" />
       <ProjectReference Include="..\CashFlow.Lib.EventBus\CashFlow.Lib.EventBus.csproj" />
     </ItemGroup>
 
@@ -25,5 +22,4 @@
         <DependentUpon>appsettings.json</DependentUpon>
       </Content>
     </ItemGroup>
-
 </Project>

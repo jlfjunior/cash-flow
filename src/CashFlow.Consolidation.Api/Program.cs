@@ -1,6 +1,5 @@
-using CashFlow.Consolidation.Api.Domain;
-using CashFlow.Consolidation.Api.Domain.Services;
-using CashFlow.Consolidation.Api.Infrastructure;
+using CashFlow.Consolidation.Application;
+using CashFlow.Consolidation.Data;
 using CashFlow.Lib.EventBus;
 using Scalar.AspNetCore;
 
@@ -12,8 +11,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddRabbitMQ(builder.Configuration);
 builder.Services.Configure<MongoDbConfiguration>(builder.Configuration.GetSection("MongoDB"));
 builder.Services.AddScoped<IDailyClosureService, DailyClosureService>();
+builder.Services.AddScoped<ICreateTransaction, CreateTransaction>();
 
-builder.Services.AddHostedService<TransactionConsumer>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
