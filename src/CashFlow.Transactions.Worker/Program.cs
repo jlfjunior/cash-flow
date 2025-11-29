@@ -1,29 +1,23 @@
-﻿using CashFlow.Lib.EventBus;
+using CashFlow.Lib.EventBus;
 using CashFlow.Transactions.Application;
 using CashFlow.Transactions.Data;
 using CashFlow.Transactions.Domain.Repositories;
 using CashFlow.Transactions.Worker;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
-var host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices((context, services) =>
-    {
-        services.AddDbContext<TransactionContext>(options =>
-            options.UseNpgsql(context.Configuration.GetConnectionString("TransactionContext")));
+var builder = Host.CreateApplicationBuilder(args);
 
-        // Register application services
-        services.AddScoped<IRepository, Repository>();
-        services.AddScoped<ICreateAccount, CreateAccount>();
+builder.Services.AddHostedService<CreateAccountWorker>();
 
-        // Register RabbitMQ
-        services.AddRabbitMQ(context.Configuration);
+builder.Services.AddDbContext<TransactionContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("TransactionContext")));
 
-        // Register hosted service (consumer)
-        services.AddHostedService<CustomerCreatedConsumer>();
-    })
-    .Build();
+// Register application services
+builder.Services.AddScoped<IRepository, Repository>();
+builder.Services.AddScoped<ICreateAccount, CreateAccount>();
 
-await host.RunAsync();
+// Register RabbitMQ
+builder.Services.AddRabbitMQ(builder.Configuration);
+
+var host = builder.Build();
+host.Run();

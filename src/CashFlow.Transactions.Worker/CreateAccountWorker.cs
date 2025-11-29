@@ -1,14 +1,11 @@
 using CashFlow.Lib.EventBus;
 using CashFlow.Transactions.Application;
 using CashFlow.Transactions.Application.Responses;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace CashFlow.Transactions.Worker;
 
-public class CustomerCreatedConsumer(
-    ILogger<CustomerCreatedConsumer> logger,
+public class CreateAccountWorker(
+    ILogger<CreateAccountWorker> logger,
     IEventBus eventBus,
     IServiceScopeFactory scopeFactory)
     : IHostedService
