@@ -1,4 +1,4 @@
-using CashFlow.Transactions.Data.Configurations;
+using System.Reflection;
 using CashFlow.Transactions.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +10,6 @@ public class TransactionContext(DbContextOptions<TransactionContext> options) : 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new AccountConfiguration());
-        modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }
