@@ -8,4 +8,5 @@ public class OutboxMessage
     public DateTime CreatedAt { get; set; }
     public DateTime? ProcessedAt { get; set; }
     public OutboxStatus Status { get; set; }
+    public string StatusReason { get; set; }
 }
