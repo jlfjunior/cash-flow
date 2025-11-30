@@ -1,5 +1,7 @@
+using System.Text.Json;
 using CashFlow.Customers.Application.Requests;
 using CashFlow.Customers.Application.Responses;
+using CashFlow.Customers.Domain.Entities;
 using CashFlow.Customers.Domain.Events;
 using CashFlow.Customers.Domain.Repositories;
 using CashFlow.Lib.EventBus;
@@ -20,11 +22,23 @@ public class UpdateCustomer(ILogger<UpdateCustomer> logger, IRepository reposito
         
         var customerEvent = new CustomerUpdated(customer.Id, request.FullName);
 
-        await repository.UpsertAsync(customer, token);
+        var messages = new List<OutboxMessage>()
+        {
+            new OutboxMessage()
+            {
+                Id = Guid.NewGuid(),
+                Type = customerEvent.GetType().Name,
+                Content = JsonSerializer.Serialize(customerEvent),
+                CreatedAt = DateTime.UtcNow,
+                Status = OutboxStatus.Pending
+            }
+        }; 
         
-        await eventBus.PublishAsync(customerEvent, "queuing.customers.updated");
+        await repository.UpsertAsync(messages, token);
         
         logger.LogInformation("Updated customer. Id: {Id}", customer.Id);
+        
+        await repository.CommitAsync(token);
         
         return new UpdateCustomerResponse(customer.Id,  customer.FullName);
     }

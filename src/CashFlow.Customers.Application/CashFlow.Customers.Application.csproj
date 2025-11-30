@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\CashFlow.Customers.Data\CashFlow.Customers.Data.csproj" />
       <ProjectReference Include="..\CashFlow.Customers.Domain\CashFlow.Customers.Domain.csproj" />
       <ProjectReference Include="..\CashFlow.Lib.EventBus\CashFlow.Lib.EventBus.csproj" />
     </ItemGroup>

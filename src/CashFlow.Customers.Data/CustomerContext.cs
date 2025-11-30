@@ -7,10 +7,11 @@ namespace CashFlow.Customers.Data;
 public class CustomerContext(DbContextOptions<CustomerContext> options) : DbContext(options)
 {
     public DbSet<Customer>  Customers { get; set; }
-
+    public DbSet<OutboxMessage>  OutboxMessages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new CustomerConfiguration());
+        modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
     }
 }

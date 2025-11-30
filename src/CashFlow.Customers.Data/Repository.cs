@@ -1,5 +1,6 @@
 using CashFlow.Customers.Domain.Repositories;
 using CashFlow.Customers.Domain.Entities;
+using CashFlow.Lib.Sharable;
 using Microsoft.EntityFrameworkCore;
 
 namespace CashFlow.Customers.Data;
@@ -9,8 +10,14 @@ public class Repository(CustomerContext context) : IRepository
     public async Task UpsertAsync(Customer customer, CancellationToken token)
     {
         context.Customers.Add(customer);
-        await context.SaveChangesAsync(token);
     }
+
+    public async Task UpsertAsync(IEnumerable<OutboxMessage> events, CancellationToken token)
+    {
+        context.OutboxMessages.AddRange(events);
+    }
+
+    public async Task CommitAsync(CancellationToken token) => await context.SaveChangesAsync(token);
 
     public async Task<Customer> GetByIdAsync(Guid id)
     {

@@ -19,9 +19,8 @@ public class CreateCustomerTests
 
         var logger = Substitute.For<ILogger<CreateCustomer>>();
         var repository = Substitute.For<IRepository>();
-        var eventBus = Substitute.For<IEventBus>();
 
-        var createCustomer = new CreateCustomer(logger, repository, eventBus);
+        var createCustomer = new CreateCustomer(logger, repository);
 
         var customer = await createCustomer.ExecuteAsync(request, CancellationToken.None);
 
