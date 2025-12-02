@@ -19,9 +19,29 @@ public class Account : Entity
         CustomerId = customerId;
         Balance = decimal.Zero;
     }
-
-    public void AddTransaction(string direction, decimal amount) { }
     
+    public void AddDebit(decimal amount)
+    {
+        ProcessDebit(amount, TransactionType.Withdraw);
+    }
+    
+    public void AddCredit(decimal amount)
+    {
+
+        if (Transactions.IsNull())
+            Transactions = new List<Transaction>();
+
+        var transaction = new Transaction(Id, Direction.Credit, TransactionType.Deposit, amount);
+        
+        Transactions.Add(transaction);
+        Balance += amount;
+    }
+    
+    public void PayBill(decimal amount)
+    {
+        ProcessDebit(amount, TransactionType.BillPayment);
+    }
+
     private void ProcessDebit(decimal amount, TransactionType transactionType)
     {
         if (Balance < amount) 
@@ -47,27 +67,5 @@ public class Account : Entity
         
         AddEvent(transactionEventCreated);
         AddEvent(balanceEvent);
-    }
-    
-    public void AddDebit(decimal amount)
-    {
-        ProcessDebit(amount, TransactionType.Withdraw);
-    }
-    
-    public void AddCredit(decimal amount)
-    {
-
-        if (Transactions.IsNull())
-            Transactions = new List<Transaction>();
-
-        var transaction = new Transaction(Id, Direction.Credit, TransactionType.Deposit, amount);
-        
-        Transactions.Add(transaction);
-        Balance += amount;
-    }
-    
-    public void PayBill(decimal amount)
-    {
-        ProcessDebit(amount, TransactionType.BillPayment);
     }
 }
