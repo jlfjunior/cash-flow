@@ -15,6 +15,10 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Domain.Entities
         builder.Property(x => x.ReferenceDate);
         builder.Property(x => x.Value);
         builder.Property(x => x.Direction);
-        builder.Property(x => x.TransactionType);
+        
+        builder.HasDiscriminator(x => x.TransactionType)
+            .HasValue<Domain.Entities.DepositTransaction>(Domain.Entities.TransactionType.Deposit)
+            .HasValue<Domain.Entities.WithdrawTransaction>(Domain.Entities.TransactionType.Withdraw)
+            .HasValue<Domain.Entities.BillPaymentTransaction>(Domain.Entities.TransactionType.BillPayment);
     }
 }

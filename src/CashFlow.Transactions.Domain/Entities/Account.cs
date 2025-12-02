@@ -10,7 +10,7 @@ public class Account : Entity
     public Guid CustomerId { get; private set; }
     public decimal Balance { get; private set; }
     
-    public ICollection<Transaction> Transactions { get; set; }
+    public ICollection<Transaction>? Transactions { get; set; }
 
     public Account(Guid customerId)
     {
@@ -22,38 +22,65 @@ public class Account : Entity
     
     public void AddDebit(decimal amount)
     {
-        ProcessDebit(amount, TransactionType.Withdraw);
+        ProcessDebit(new WithdrawTransaction(Id, amount));
     }
     
     public void AddCredit(decimal amount)
     {
-
-        if (Transactions.IsNull())
-            Transactions = new List<Transaction>();
-
-        var transaction = new Transaction(Id, Direction.Credit, TransactionType.Deposit, amount);
-        
-        Transactions.Add(transaction);
-        Balance += amount;
+        ProcessCredit(new DepositTransaction(Id, amount));
     }
     
     public void PayBill(decimal amount)
     {
-        ProcessDebit(amount, TransactionType.BillPayment);
+        ProcessDebit(new BillPaymentTransaction(Id, amount));
     }
 
-    private void ProcessDebit(decimal amount, TransactionType transactionType)
+    public void AddTransaction(string direction, decimal amount)
     {
-        if (Balance < amount) 
+        if (string.Equals(direction, "Credit", StringComparison.OrdinalIgnoreCase))
+        {
+            AddCredit(amount);
+        }
+        else if (string.Equals(direction, "Debit", StringComparison.OrdinalIgnoreCase))
+        {
+            AddDebit(amount);
+        }
+        else
+        {
+            throw new ArgumentException($"Invalid direction: {direction}. Must be 'Credit' or 'Debit'.", nameof(direction));
+        }
+    }
+
+    private void ProcessCredit(Transaction transaction)
+    {
+        Transactions ??= new List<Transaction>();
+
+        Transactions.Add(transaction);
+        Balance += transaction.Value;
+        
+        var transactionEventCreated = new TransactionCreated(
+            transaction.Id,
+            transaction.AccountId,
+            transaction.Direction.ToString(),
+            transaction.TransactionType.ToString(),
+            transaction.ReferenceDate,
+            transaction.Value);
+        
+        var balanceEvent = new AccountUpdated(Id, transactionEventCreated.ReferenceDate, Balance, transactionEventCreated);
+        
+        AddEvent(transactionEventCreated);
+        AddEvent(balanceEvent);
+    }
+
+    private void ProcessDebit(Transaction transaction)
+    {
+        if (Balance < transaction.Value) 
             throw new InvalidOperationException("Debit amount can't be less than current balance");
         
-        if (Transactions.IsNull())
-            Transactions = new List<Transaction>();
+        Transactions ??= new List<Transaction>();
 
-        var transaction = new Transaction(Id, Direction.Debit, transactionType, amount);
-        
         Transactions.Add(transaction);
-        Balance -= amount;
+        Balance -= transaction.Value;
         
         var transactionEventCreated = new TransactionCreated(
             transaction.Id,
