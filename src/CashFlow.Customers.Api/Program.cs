@@ -5,6 +5,7 @@ using CashFlow.Customers.Data;
 using CashFlow.Customers.Domain.Repositories;
 using CashFlow.Lib.EventBus;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ builder.Services.AddScoped<IUpdateCustomer,  UpdateCustomer>();
 
 builder.Services.AddRabbitMQ(builder.Configuration);
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,6 +33,17 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
+app.MapGet("/health", async (HealthCheckService service) =>
+    {
+        var report = await service.CheckHealthAsync();
+        return Results.Json(new
+        {
+            status = report.Status.ToString()
+        });
+    })
+    .WithName("Health Check")
+    .WithSummary("Shows the API health status (detailed).")
+    .WithDescription("Runs the registered health checks and returns a JSON report suitable for reading in Swagger / OpenAPI UI.");
 
 app.MapGet("/customers", async () =>
 {

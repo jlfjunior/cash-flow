@@ -8,20 +8,11 @@ using RabbitMQ.Client.Events;
 
 namespace CashFlow.Lib.EventBus;
 
-public class EventBus : IEventBus
+public class EventBus(ILogger<EventBus> logger, ConnectionFactory factory) : IEventBus
 {
-    private readonly ILogger<EventBus> _logger;
-    private readonly ConnectionFactory _factory;
-
-    public EventBus(ILogger<EventBus> logger, ConnectionFactory factory)
-    {
-        _logger = logger;
-        _factory = factory;
-    }
-
     public async Task PublishAsync<T>(T @event, string queueName) where T : class
     {
-        await using var connection = await _factory.CreateConnectionAsync();
+        await using var connection = await factory.CreateConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
         
         var message = JsonSerializer.Serialize(@event);
@@ -30,12 +21,12 @@ public class EventBus : IEventBus
         await channel.QueueDeclareAsync(queue: queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
         await channel.BasicPublishAsync(exchange: string.Empty, routingKey: queueName, body: body);
         
-        _logger.LogInformation($"Publishing domain event: {queueName} - {message}");
+        logger.LogInformation($"Publishing domain event: {queueName} - {message}");
     }
 
     public async Task SubscribeAsync<T>(string queueName, Func<T, Task> handler) where T : class
     {
-        var connection = await _factory.CreateConnectionAsync();
+        var connection = await factory.CreateConnectionAsync();
         var channel = await connection.CreateChannelAsync();
 
         await channel.QueueDeclareAsync(queue: queueName, durable: false, exclusive: false, autoDelete: false,
@@ -61,13 +52,12 @@ public class EventBus : IEventBus
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error processing message from queue {QueueName}", queueName);
+                logger.LogError(ex, "Error processing message from queue {QueueName}", queueName);
             }
         };
 
         await channel.BasicConsumeAsync(queueName, autoAck: true, consumer: consumer);
         
-        _logger.LogInformation("Started consuming from queue: {QueueName}", queueName);
+        logger.LogInformation("Started consuming from queue: {QueueName}", queueName);
     }
-
 }
