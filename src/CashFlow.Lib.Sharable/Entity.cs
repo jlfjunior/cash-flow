@@ -4,11 +4,9 @@ namespace CashFlow.Lib.Sharable
 {
     public abstract class Entity
     {
-        //[BsonIgnore]
-        private IList<IEvent> _events = new List<IEvent>();
+        private readonly List<IEvent> _events = new();
 
-        //[BsonIgnore] 
-        //public IReadOnlyCollection<IEvent> Events => _events.AsReadOnly();
+        public IReadOnlyCollection<IEvent> Events => _events.AsReadOnly();
     
         public void AddEvent(IEvent @event) => _events.Add(@event);
     
