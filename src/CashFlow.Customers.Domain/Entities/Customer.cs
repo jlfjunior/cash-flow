@@ -8,9 +8,18 @@ public class Customer
 
     public Customer(string fullName)
     {
+        if (string.IsNullOrWhiteSpace(fullName))
+            throw new ArgumentException("FullName is required");
+        
         Id = Guid.CreateVersion7();
         FullName = fullName;
     }
 
-    public void WithFullName(string fullName)  => FullName = fullName;
+    public void WithFullName(string fullName)
+    {
+        if (string.IsNullOrWhiteSpace(fullName))
+            throw new ArgumentException("FullName is required");
+        
+        FullName = fullName;
+    }
 }
