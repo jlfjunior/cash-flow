@@ -7,15 +7,10 @@
         <Nullable>enable</Nullable>
         <UserSecretsId>ca996a43-e163-42e9-9684-332df1fe356a</UserSecretsId>
         <LangVersion>latest</LangVersion>
-        <RuntimeFrameworkVersion>10.0.0</RuntimeFrameworkVersion>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\CashFlow.Transactions.Api\CashFlow.Transactions.Api.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Aspire.Hosting.AppHost" Version="13.0.2" />
     </ItemGroup>
 
 </Project>
