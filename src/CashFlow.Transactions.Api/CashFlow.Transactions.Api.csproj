@@ -14,7 +14,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
-    <PackageReference Include="Scalar.AspNetCore" Version="2.11.0" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.11.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +22,7 @@
     <ProjectReference Include="..\CashFlow.Lib.EventBus\CashFlow.Lib.EventBus.csproj" />
     <ProjectReference Include="..\CashFlow.Transactions.Application\CashFlow.Transactions.Application.csproj" />
     <ProjectReference Include="..\CashFlow.Transactions.Data\CashFlow.Transactions.Data.csproj" />
+    <ProjectReference Include="..\CashFlow.Transactions.ServicesDefaults\CashFlow.Transactions.ServicesDefaults.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,10 +5,12 @@ using CashFlow.Transactions.Api.Endpoints;
 using CashFlow.Transactions.Data;
 using CashFlow.Transactions.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -34,6 +36,19 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
+app.MapDefaultEndpoints();
+
+app.MapGet("/health", async (HealthCheckService service) =>
+    {
+        var report = await service.CheckHealthAsync();
+        return Results.Json(new
+        {
+            status = report.Status.ToString()
+        });
+    })
+    .WithName("Health Check")
+    .WithSummary("Shows the API health status (detailed).")
+    .WithDescription("Runs the registered health checks and returns a JSON report suitable for reading in Swagger / OpenAPI UI.");
 
 app.MapTransactionEndpoints();
 app.MapAccountEndpoints();

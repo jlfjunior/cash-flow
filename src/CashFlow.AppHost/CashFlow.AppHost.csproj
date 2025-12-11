@@ -10,6 +10,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\CashFlow.Consolidation.Api\CashFlow.Consolidation.Api.csproj" />
+      <ProjectReference Include="..\CashFlow.Customers.Api\CashFlow.Customers.Api.csproj" />
       <ProjectReference Include="..\CashFlow.Transactions.Api\CashFlow.Transactions.Api.csproj" />
     </ItemGroup>
 
