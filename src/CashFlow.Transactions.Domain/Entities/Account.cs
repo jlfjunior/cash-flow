@@ -51,7 +51,7 @@ public class Account : Entity
         }
     }
 
-    private void ProcessCredit(Transaction transaction)
+    public void ProcessCredit(Transaction transaction)
     {
         Transactions ??= new List<Transaction>();
 
@@ -72,7 +72,7 @@ public class Account : Entity
         AddEvent(balanceEvent);
     }
 
-    private void ProcessDebit(Transaction transaction)
+    public void ProcessDebit(Transaction transaction)
     {
         if (Balance < transaction.Value) 
             throw new InvalidOperationException("Debit amount can't be less than current balance");
