@@ -10,9 +10,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CashFlow.Consolidation.Api\CashFlow.Consolidation.Api.csproj" />
-      <ProjectReference Include="..\CashFlow.Customers.Api\CashFlow.Customers.Api.csproj" />
-      <ProjectReference Include="..\CashFlow.Transactions.Api\CashFlow.Transactions.Api.csproj" />
+      <ProjectReference Include="..\CashFlow.Api\CashFlow.Api.csproj" />
+      <ProjectReference Include="..\CashFlow.Worker\CashFlow.Worker.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.1.0" />
     </ItemGroup>
 
 </Project>

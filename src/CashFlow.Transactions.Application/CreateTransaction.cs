@@ -1,4 +1,5 @@
 using CashFlow.Lib.EventBus;
+using CashFlow.Lib.Sharable;
 using CashFlow.Transactions.Domain.Repositories;
 using CashFlow.Transactions.Application.Requests;
 using CashFlow.Transactions.Application.Responses;
@@ -6,8 +7,10 @@ using Microsoft.Extensions.Logging;
 
 namespace CashFlow.Transactions.Application
 {
-    public class CreateTransaction(ILogger<CreateTransaction> logger, IRepository accountRepository, IEventBus eventBus)
-        : ICreateTransaction
+    public class CreateTransaction(ILogger<CreateTransaction> logger, 
+        IRepository accountRepository, 
+        IEventBus eventBus)
+        : ICommand<CreateTransactionRequest, AccountResponse>
     {
         public async Task<AccountResponse> ExecuteAsync(CreateTransactionRequest request, CancellationToken token)
         {

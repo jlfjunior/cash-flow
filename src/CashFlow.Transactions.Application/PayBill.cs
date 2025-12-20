@@ -1,4 +1,5 @@
 using CashFlow.Lib.EventBus;
+using CashFlow.Lib.Sharable;
 using CashFlow.Transactions.Domain.Repositories;
 using CashFlow.Transactions.Domain.Exceptions;
 using CashFlow.Transactions.Application.Requests;
@@ -7,8 +8,10 @@ using Microsoft.Extensions.Logging;
 
 namespace CashFlow.Transactions.Application;
 
-public class PayBill(ILogger<PayBill> logger, IRepository accountRepository, IEventBus eventBus)
-    : IPayBill
+public class PayBill(ILogger<PayBill> logger, 
+    IRepository accountRepository, 
+    IEventBus eventBus)
+    : ICommand<PayBillRequest, AccountResponse>
 {
     public async Task<AccountResponse> ExecuteAsync(PayBillRequest request, CancellationToken token)
     {

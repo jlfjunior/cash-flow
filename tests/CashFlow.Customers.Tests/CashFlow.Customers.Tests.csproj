@@ -30,16 +30,15 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\CashFlow.Customers.Api\CashFlow.Customers.Api.csproj" />
-      <ProjectReference Include="..\..\src\CashFlow.Transactions.Api\CashFlow.Transactions.Api.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Content Update="appsettings.Testing.json">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\CashFlow.Customers.Application\CashFlow.Customers.Application.csproj" />
     </ItemGroup>
 
 </Project>

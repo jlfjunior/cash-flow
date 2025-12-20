@@ -1,4 +1,5 @@
 using CashFlow.Lib.EventBus;
+using CashFlow.Lib.Sharable;
 using CashFlow.Transactions.Domain.Repositories;
 using CashFlow.Transactions.Domain.Exceptions;
 using CashFlow.Transactions.Domain.Entities;
@@ -9,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace CashFlow.Transactions.Application;
 
 public class Transfer(ILogger<Transfer> logger, IRepository accountRepository, IEventBus eventBus)
-    : ITransfer
+    : ICommand<TransferRequest, AccountResponse>
 {
     public async Task<AccountResponse> ExecuteAsync(TransferRequest request, CancellationToken token)
     {

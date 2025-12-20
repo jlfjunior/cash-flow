@@ -1,7 +1,6 @@
 using CashFlow.Customers.Application;
 using CashFlow.Customers.Application.Requests;
 using CashFlow.Customers.Domain.Repositories;
-using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 
