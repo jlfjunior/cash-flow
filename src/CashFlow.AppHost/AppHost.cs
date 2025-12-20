@@ -1,7 +1,6 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddProject<Projects.CashFlow_Transactions_Api>("transactions");
-//builder.AddProject<Projects.CashFlow_Consolidation_Api>("consolidation");
-//builder.AddProject<Projects.CashFlow_Customers_Api>("customers");
+builder.AddProject<Projects.CashFlow_Api>("apis");
+builder.AddProject<Projects.CashFlow_Worker>("workers");
 
 builder.Build().Run();
