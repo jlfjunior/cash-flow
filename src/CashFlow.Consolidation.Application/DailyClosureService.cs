@@ -1,35 +1,24 @@
 using CashFlow.Consolidation.Data;
 using CashFlow.Consolidation.Domain.Entities;
+using CashFlow.Consolidation.Domain.Repositories;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using MongoDB.Driver;
-using Transaction = System.Transactions.Transaction;
 
 namespace CashFlow.Consolidation.Application;
 
 public class DailyClosureService : IDailyClosureService
 {
     private readonly ILogger<DailyClosureService> _logger;
-    private readonly IMongoCollection<DailyClosure> _dailyClosures;
-    private readonly IMongoCollection<Transaction> _transactions;
+    private readonly IRepository _repository;
 
-    public DailyClosureService(ILogger<DailyClosureService> logger, IOptions<MongoDbConfiguration> mongoOptions)
+    public DailyClosureService(ILogger<DailyClosureService> logger, IRepository repository)
     {
         _logger = logger;
-        
-        var config = mongoOptions.Value;
-        var connectionString = $"mongodb://{config.Username}:{config.Password}@{config.Host}:{config.Port}/{config.Database}?authSource={config.Username}";
-
-        var client = new MongoClient(connectionString);
-        var database = client.GetDatabase(config.Database);
-        _dailyClosures = database.GetCollection<DailyClosure>("daily_closures");
-        _transactions = database.GetCollection<Transaction>("transactions");
+        _repository = repository;
     }
 
-    public async Task<DailyClosure> GetOrCreateAsync(DateOnly date)
+    public async Task<DailyClosure> GetOrCreateAsync(DateOnly date, Guid customerId, CancellationToken token)
     {
-        var filter = Builders<DailyClosure>.Filter.Eq(dc => dc.ReferenceDate, date);
-        var existingClosure = await _dailyClosures.Find(filter).FirstOrDefaultAsync();
+        var existingClosure = await _repository.GetDailyClosureByDateAsync(date, customerId, token);
 
         if (existingClosure != null)
         {
@@ -39,14 +28,56 @@ public class DailyClosureService : IDailyClosureService
         var newClosure = new DailyClosure
         {
             Id = Guid.NewGuid(),
-            CustomerId = Guid.Empty, // Will be set when adding transactions
+            CustomerId = customerId,
             ReferenceDate = date,
             Value = 0
         };
 
-        await _dailyClosures.InsertOneAsync(newClosure);
-        _logger.LogInformation("Created new daily closure for date {Date}", date);
+        await _repository.UpsertAsync(newClosure, token);
+        _logger.LogInformation("Created new daily closure for date {Date} and customer {CustomerId}", date, customerId);
 
         return newClosure;
+    }
+
+    public async Task UpdateDailyClosureValueAsync(Guid dailyClosureId, decimal transactionValue, Direction direction, CancellationToken token)
+    {
+        // Get all transactions for this daily closure
+        var transactions = await _repository.GetTransactionsByDailyClosureIdAsync(dailyClosureId, token);
+        
+        if (!transactions.Any())
+        {
+            _logger.LogWarning("No transactions found for daily closure {DailyClosureId}", dailyClosureId);
+            return;
+        }
+
+        // Recalculate total value from all transactions
+        // Credits increase the value, debits decrease it
+        var totalValue = transactions
+            .Where(t => t.Direction == Direction.Credit)
+            .Sum(t => t.Value) - transactions
+            .Where(t => t.Direction == Direction.Debit)
+            .Sum(t => t.Value);
+
+        // Get the daily closure to update
+        var firstTransaction = transactions.First();
+        var dailyClosure = await _repository.GetDailyClosureByDateAsync(
+            firstTransaction.ReferenceDate, 
+            firstTransaction.CustomerId, 
+            token);
+
+        if (dailyClosure == null)
+        {
+            _logger.LogError("Daily closure {DailyClosureId} not found", dailyClosureId);
+            return;
+        }
+
+        dailyClosure.Value = totalValue;
+        await _repository.UpsertAsync(dailyClosure, token);
+        
+        _logger.LogInformation(
+            "Updated daily closure {DailyClosureId} value to {Value} (recalculated from {TransactionCount} transactions)",
+            dailyClosureId, 
+            totalValue,
+            transactions.Count);
     }
 }
