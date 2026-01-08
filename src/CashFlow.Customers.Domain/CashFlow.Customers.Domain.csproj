@@ -11,4 +11,8 @@
       <ProjectReference Include="..\CashFlow.Lib.Sharable\CashFlow.Lib.Sharable.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MongoDB.Bson" Version="3.5.0" />
+    </ItemGroup>
+
 </Project>

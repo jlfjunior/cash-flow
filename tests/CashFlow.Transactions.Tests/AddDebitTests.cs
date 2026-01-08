@@ -148,4 +148,3 @@ public class AddDebitTests
             Arg.Any<Func<object, Exception?, string>>());
     }
 }
-

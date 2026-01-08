@@ -8,7 +8,8 @@ using Microsoft.Extensions.Logging;
 
 namespace CashFlow.Transactions.Application;
 
-public class PayBill(ILogger<PayBill> logger, 
+public class PayBill(
+    ILogger<PayBill> logger, 
     IRepository accountRepository, 
     IEventBus eventBus)
     : ICommand<PayBillRequest, AccountResponse>
@@ -38,4 +39,3 @@ public class PayBill(ILogger<PayBill> logger,
         return new AccountResponse(account.Id);
     }
 }
-

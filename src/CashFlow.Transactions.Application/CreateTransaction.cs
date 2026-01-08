@@ -22,7 +22,7 @@ namespace CashFlow.Transactions.Application
         
             await eventBus.PublishAsync(account.Transactions.First(), "accounts.update");
         
-            logger.LogInformation("Transaction created.  Id {AccountId}.", account.Id);
+            logger.LogInformation("Transaction created. Id {AccountId}.", account.Id);
 
             return new AccountResponse(account.Id);
         }

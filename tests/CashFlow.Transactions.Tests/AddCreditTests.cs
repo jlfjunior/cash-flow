@@ -111,4 +111,3 @@ public class AddCreditTests
             Arg.Any<Func<object, Exception?, string>>());
     }
 }
-

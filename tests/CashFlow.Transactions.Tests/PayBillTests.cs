@@ -20,7 +20,6 @@ public class PayBillTests
         var initialBalance = 200.00m;
 
         var account = new Account(customerId);
-        // Set initial balance by adding a credit transaction
         account.AddCredit(initialBalance);
         
         var accountId = account.Id;
@@ -59,7 +58,6 @@ public class PayBillTests
         var initialBalance = 100.00m;
 
         var account = new Account(customerId);
-        // Set initial balance by adding a credit transaction
         account.AddCredit(initialBalance);
         
         var accountId = account.Id;
@@ -142,4 +140,3 @@ public class PayBillTests
         await eventBus.DidNotReceive().PublishAsync(Arg.Any<Transaction>(), Arg.Any<string>());
     }
 }
-

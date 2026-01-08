@@ -1,7 +1,6 @@
 using CashFlow.Lib.Sharable;
 using CashFlow.Transactions.Application.Requests;
 using CashFlow.Transactions.Application.Responses;
-using CashFlow.Transactions.Domain.Repositories;
 
 namespace CashFlow.Api.Endpoints;
 
@@ -9,18 +8,6 @@ public static class TransactionEndpoints
 {
     public static void MapTransactionEndpoints(this WebApplication app)
     {
-        app.MapGet("/transactions", async (IRepository repository) =>
-            {
-                var transactions = await repository.SearchAsync();
-
-                return Results.Ok(transactions);
-            })
-            .WithSummary("Get Transactions")
-            .WithDescription(
-                "Retrieves a complete list of all financial transactions in the system, including both credit and debit entries.")
-            .WithTags("Transactions")
-            .WithName("GetTransactions");
-
         app.MapPost("/transactions/credit",
                 async (CreateTransactionRequest request, ICommand<CreateTransactionRequest, AccountResponse> command) =>
                 {

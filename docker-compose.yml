@@ -14,7 +14,6 @@ services:
       - ./mongo-init:/docker-entrypoint-initdb.d
     networks:
       - cashflow-network
-    profiles: ["disabled"]
 
   mongo-express:
     image: mongo-express:1.0.2
@@ -32,7 +31,6 @@ services:
       - mongodb
     networks:
       - cashflow-network
-    profiles: ["disabled"]
 
   rabbitmq:
     image: rabbitmq:3.12-management
@@ -60,6 +58,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    profiles: ["disabled"]
 
 volumes:
   mongodb_data:

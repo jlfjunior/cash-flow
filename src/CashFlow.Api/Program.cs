@@ -7,7 +7,7 @@ using CashFlow.Transactions.Application;
 using CashFlow.Transactions.Application.Requests;
 using CashFlow.Transactions.Application.Responses;
 using CashFlow.Transactions.Data;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,8 +17,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.AddServiceDefaults();
 
-builder.Services.AddDbContext<TransactionContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddDbContext<CustomerContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Add MongoDB using Aspire integration
+builder.AddMongoDBClient("mongodb");
+
+// Configure MongoDB contexts
+var mongoDatabaseName = builder.Configuration.GetValue<string>("MongoDB:DatabaseName") ?? "cashflow";
+
+builder.Services.AddScoped<CustomerMongoContext>(sp =>
+{
+    var client = sp.GetRequiredService<IMongoClient>();
+    return new CustomerMongoContext(client, mongoDatabaseName);
+});
+
+builder.Services.AddScoped<TransactionMongoContext>(sp =>
+{
+    var client = sp.GetRequiredService<IMongoClient>();
+    return new TransactionMongoContext(client, mongoDatabaseName);
+});
 
 builder.Services.AddRabbitMQ(builder.Configuration);
 

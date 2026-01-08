@@ -1,9 +1,14 @@
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace CashFlow.Customers.Domain.Entities;
 
 public class Customer
 {
+    [BsonId]
+    [BsonElement("_id")]
     public Guid Id { get; private set; }
     
+    [BsonElement("fullName")]
     public string FullName { get; private set; }
 
     public Customer(string fullName)

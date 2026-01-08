@@ -1,23 +1,23 @@
-using System.Runtime.InteropServices.ComTypes;
 using System.Text.Json;
-using CashFlow.Customers.Data;
 using CashFlow.Customers.Domain.Entities;
 using CashFlow.Customers.Domain.Events;
+using CashFlow.Customers.Domain.Repositories;
 using CashFlow.Lib.EventBus;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace CashFlow.Customers.Application;
 
-public class PublishCustomerCreated(ILogger<PublishCustomerCreated> logger, CustomerContext context, IEventBus  eventBus) 
+public class PublishCustomerCreated(
+    ILogger<PublishCustomerCreated> logger, 
+    IRepository repository, 
+    IEventBus eventBus) 
     : IPublishCustomerCreated
 {
     public async Task ExecuteAsync(CancellationToken token)
     {
-        var customerCreatedEvent = await context.OutboxMessages
-            .Where(o => o.Status == OutboxStatus.Pending)
-            .Where(o => o.Type == typeof(CustomerCreated).Name)
-            .FirstOrDefaultAsync(token);
+        var customerCreatedEvent = await repository.GetPendingOutboxMessageByTypeAsync(
+            typeof(CustomerCreated).Name, 
+            token);
 
         if (customerCreatedEvent is null)
         {
@@ -29,13 +29,18 @@ public class PublishCustomerCreated(ILogger<PublishCustomerCreated> logger, Cust
         {
             var customerCreated = JsonSerializer.Deserialize<CustomerCreated>(customerCreatedEvent.Content);
             await eventBus.PublishAsync(customerCreated, "queuing.customers.created");
+            
             customerCreatedEvent.Status = OutboxStatus.Processed;
+            customerCreatedEvent.ProcessedAt = DateTime.UtcNow;
+            
+            await repository.UpdateOutboxMessageAsync(customerCreatedEvent, token);
         }
         catch (Exception e)
         {
             customerCreatedEvent.Status = OutboxStatus.Failed;
+            customerCreatedEvent.StatusReason = e.Message;
+            
+            await repository.UpdateOutboxMessageAsync(customerCreatedEvent, token);
         }
-        
-        await context.SaveChangesAsync(token);
     }
 }

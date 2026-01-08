@@ -1,37 +1,81 @@
 using CashFlow.Customers.Domain.Repositories;
 using CashFlow.Customers.Domain.Entities;
 using CashFlow.Lib.Sharable;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 namespace CashFlow.Customers.Data;
 
-public class Repository(CustomerContext context) : IRepository
+public class Repository : IRepository
 {
+    private readonly CustomerMongoContext _context;
+
+    public Repository(CustomerMongoContext context)
+    {
+        _context = context;
+    }
+
     public async Task UpsertAsync(Customer customer, CancellationToken token)
     {
-        context.Customers.Add(customer);
+        var filter = Builders<Customer>.Filter.Eq(c => c.Id, customer.Id);
+        await _context.Customers.ReplaceOneAsync(
+            filter, 
+            customer, 
+            new ReplaceOptions { IsUpsert = true }, 
+            token);
     }
 
     public async Task UpsertAsync(IEnumerable<OutboxMessage> events, CancellationToken token)
     {
-        context.OutboxMessages.AddRange(events);
+        if (events == null || !events.Any())
+            return;
+
+        await _context.OutboxMessages.InsertManyAsync(events, cancellationToken: token);
     }
 
-    public async Task CommitAsync(CancellationToken token) => await context.SaveChangesAsync(token);
+    public async Task CommitAsync(CancellationToken token)
+    {
+        // MongoDB operations are atomic by default, so this is a no-op for simple operations
+        // For multi-document transactions, we would use IClientSessionHandle
+        await Task.CompletedTask;
+    }
 
     public async Task<Customer> GetByIdAsync(Guid id)
     {
-        var customer = await context.Customers
-            .FirstOrDefaultAsync(x => x.Id == id);
+        var filter = Builders<Customer>.Filter.Eq(c => c.Id, id);
+        var customer = await _context.Customers
+            .Find(filter)
+            .FirstOrDefaultAsync();
 
         return customer;
     }
 
     public async Task<IEnumerable<Customer>> SearchAsync()
     {
-        var customers = await context.Customers
+        var customers = await _context.Customers
+            .Find(FilterDefinition<Customer>.Empty)
             .ToListAsync();
 
         return customers;
     }
+
+    public async Task<OutboxMessage?> GetPendingOutboxMessageByTypeAsync(string type, CancellationToken token)
+    {
+        var filter = Builders<OutboxMessage>.Filter.And(
+            Builders<OutboxMessage>.Filter.Eq(o => o.Status, OutboxStatus.Pending),
+            Builders<OutboxMessage>.Filter.Eq(o => o.Type, type)
+        );
+        
+        var message = await _context.OutboxMessages
+            .Find(filter)
+            .FirstOrDefaultAsync(token);
+
+        return message;
+    }
+
+    public async Task UpdateOutboxMessageAsync(OutboxMessage message, CancellationToken token)
+    {
+        var filter = Builders<OutboxMessage>.Filter.Eq(o => o.Id, message.Id);
+        await _context.OutboxMessages.ReplaceOneAsync(filter, message, cancellationToken: token);
+    }
 }
+

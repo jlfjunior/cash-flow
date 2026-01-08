@@ -9,7 +9,10 @@ using Microsoft.Extensions.Logging;
 
 namespace CashFlow.Transactions.Application;
 
-public class Transfer(ILogger<Transfer> logger, IRepository accountRepository, IEventBus eventBus)
+public class Transfer(
+    ILogger<Transfer> logger, 
+    IRepository accountRepository, 
+    IEventBus eventBus)
     : ICommand<TransferRequest, AccountResponse>
 {
     public async Task<AccountResponse> ExecuteAsync(TransferRequest request, CancellationToken token)
@@ -53,4 +56,3 @@ public class Transfer(ILogger<Transfer> logger, IRepository accountRepository, I
         return new AccountResponse(sourceAccount.Id);
     }
 }
-

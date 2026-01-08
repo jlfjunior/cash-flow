@@ -20,6 +20,8 @@ public class UpdateCustomer(ILogger<UpdateCustomer> logger, IRepository reposito
         
         customer.WithFullName(request.FullName);
         
+        await repository.UpsertAsync(customer, token);
+        
         var customerEvent = new CustomerUpdated(customer.Id, request.FullName);
 
         var messages = new List<OutboxMessage>()
@@ -40,6 +42,6 @@ public class UpdateCustomer(ILogger<UpdateCustomer> logger, IRepository reposito
         
         await repository.CommitAsync(token);
         
-        return new UpdateCustomerResponse(customer.Id,  customer.FullName);
+        return new UpdateCustomerResponse(customer.Id, customer.FullName);
     }
 }

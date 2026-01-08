@@ -1,15 +1,25 @@
 using CashFlow.Lib.Sharable;
 using CashFlow.Transactions.Domain.Events;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace CashFlow.Transactions.Domain.Entities;
 
 public class Account : Entity
 {
+    [BsonId]
+    [BsonElement("_id")]
     public Guid Id { get; private set; }
+    
+    [BsonElement("version")]
     public int Version { get; private set; }
+    
+    [BsonElement("customerId")]
     public Guid CustomerId { get; private set; }
+    
+    [BsonElement("balance")]
     public decimal Balance { get; private set; }
     
+    [BsonElement("transactions")]
     public ICollection<Transaction>? Transactions { get; set; }
 
     public Account(Guid customerId)

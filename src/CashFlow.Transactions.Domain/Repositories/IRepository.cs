@@ -9,3 +9,4 @@ namespace CashFlow.Transactions.Domain.Repositories
         Task<List<Account>> SearchAsync(Guid? accountId = null);
     }
 }
+

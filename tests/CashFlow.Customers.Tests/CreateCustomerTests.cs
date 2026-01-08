@@ -25,6 +25,8 @@ public class CreateCustomerTests
 
         Assert.Equal("John Doe", customer.FullName);
 
-        repository.Received(1);
+        await repository.Received(1).UpsertAsync(Arg.Is<CashFlow.Customers.Domain.Entities.Customer>(c => c.FullName == "John Doe"), Arg.Any<CancellationToken>());
+        await repository.Received(1).UpsertAsync(Arg.Any<IEnumerable<CashFlow.Customers.Domain.Entities.OutboxMessage>>(), Arg.Any<CancellationToken>());
+        await repository.Received(1).CommitAsync(Arg.Any<CancellationToken>());
     }
 }

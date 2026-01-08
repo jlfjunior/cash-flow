@@ -1,41 +1,47 @@
-using System.Runtime.InteropServices.ComTypes;
 using System.Text.Json;
 using CashFlow.Customers.Data;
 using CashFlow.Customers.Domain.Entities;
 using CashFlow.Customers.Domain.Events;
+using CashFlow.Customers.Domain.Repositories;
 using CashFlow.Lib.EventBus;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace CashFlow.Customers.Application;
 
-public class PublishCustomerUpdated(ILogger<PublishCustomerUpdated> logger, CustomerContext context, IEventBus  eventBus) 
+public class PublishCustomerUpdated(
+    ILogger<PublishCustomerUpdated> logger, 
+    IRepository repository, 
+    IEventBus eventBus) 
     : IPublishCustomerUpdated
 {
     public async Task ExecuteAsync(CancellationToken token)
     {
-        var customerUpdatedEvent = await context.OutboxMessages
-            .Where(o => o.Status == OutboxStatus.Pending)
-            .Where(o => o.Type == typeof(CustomerUpdated).Name)
-            .FirstOrDefaultAsync(token);
+        var customerUpdatedEvent = await repository.GetPendingOutboxMessageByTypeAsync(
+            typeof(CustomerUpdated).Name, 
+            token);
 
         if (customerUpdatedEvent is null)
         {
-            logger.LogInformation("There has not been a pending creation of customer.");
+            logger.LogInformation("There has not been a pending update of customer.");
             return;
         }
 
         try
         {
-            var customerUpdated = JsonSerializer.Deserialize<CustomerCreated>(customerUpdatedEvent.Content);
+            var customerUpdated = JsonSerializer.Deserialize<CustomerUpdated>(customerUpdatedEvent.Content);
             await eventBus.PublishAsync(customerUpdated, "queuing.customers.updated");
+            
             customerUpdatedEvent.Status = OutboxStatus.Processed;
+            customerUpdatedEvent.ProcessedAt = DateTime.UtcNow;
+            
+            await repository.UpdateOutboxMessageAsync(customerUpdatedEvent, token);
         }
         catch (Exception e)
         {
             customerUpdatedEvent.Status = OutboxStatus.Failed;
+            customerUpdatedEvent.StatusReason = e.Message;
+            
+            await repository.UpdateOutboxMessageAsync(customerUpdatedEvent, token);
         }
-        
-        await context.SaveChangesAsync(token);
     }
 }

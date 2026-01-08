@@ -218,7 +218,7 @@ public class TransferTests
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(sourceAccountId).Returns(sourceAccount);
-        repository.GetByIdAsync(destinationAccountId).Returns(Task.FromResult<Account?>(null));
+        repository.GetByIdAsync(destinationAccountId).Returns((Account?)null);
 
         var transfer = new Transfer(logger, repository, eventBus);
 
@@ -272,4 +272,3 @@ public class TransferTests
             Arg.Any<Func<object, Exception?, string>>());
     }
 }
-

@@ -32,7 +32,10 @@ public class UpdateCustomerTests
         
         Assert.Equal("John Doe", response.FullName);
 
-        repository.Received(2);
+        await repository.Received(1).GetByIdAsync(customer.Id);
+        await repository.Received(1).UpsertAsync(customer, Arg.Any<CancellationToken>());
+        await repository.Received(1).UpsertAsync(Arg.Any<IEnumerable<OutboxMessage>>(), Arg.Any<CancellationToken>());
+        await repository.Received(1).CommitAsync(Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -47,6 +50,8 @@ public class UpdateCustomerTests
         var logger = Substitute.For<ILogger<UpdateCustomer>>();
         var repository = Substitute.For<IRepository>();
         var eventBus = Substitute.For<IEventBus>();
+        
+        repository.GetByIdAsync(Arg.Any<Guid>()).Returns((Customer?)null);
         
         var updateCustomer = new UpdateCustomer(logger, repository, eventBus);
 
