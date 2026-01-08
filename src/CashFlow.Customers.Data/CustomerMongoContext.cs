@@ -3,16 +3,18 @@ using MongoDB.Driver;
 
 namespace CashFlow.Customers.Data;
 
-public class CustomerMongoContext : MongoDbContext
+public class CustomerMongoContext
 {
+    private readonly IMongoDatabase _database;
+
     public IMongoCollection<Customer> Customers { get; }
     public IMongoCollection<OutboxMessage> OutboxMessages { get; }
 
-    public CustomerMongoContext(IMongoClient mongoClient, string databaseName) 
-        : base(mongoClient, databaseName)
+    public CustomerMongoContext(IMongoClient mongoClient, string databaseName)
     {
-        Customers = Database.GetCollection<Customer>("Customers");
-        OutboxMessages = Database.GetCollection<OutboxMessage>("OutboxMessages");
+        _database = mongoClient.GetDatabase(databaseName);
+        Customers = _database.GetCollection<Customer>("Customers");
+        OutboxMessages = _database.GetCollection<OutboxMessage>("OutboxMessages");
     }
 }
 

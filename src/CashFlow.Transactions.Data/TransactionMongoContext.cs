@@ -3,14 +3,16 @@ using MongoDB.Driver;
 
 namespace CashFlow.Transactions.Data;
 
-public class TransactionMongoContext : MongoDbContext
+public class TransactionMongoContext
 {
+    private readonly IMongoDatabase _database;
+
     public IMongoCollection<Account> Accounts { get; }
 
-    public TransactionMongoContext(IMongoClient mongoClient, string databaseName) 
-        : base(mongoClient, databaseName)
+    public TransactionMongoContext(IMongoClient mongoClient, string databaseName)
     {
-        Accounts = Database.GetCollection<Account>("Accounts");
+        _database = mongoClient.GetDatabase(databaseName);
+        Accounts = _database.GetCollection<Account>("Accounts");
     }
 }
 
