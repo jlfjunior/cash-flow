@@ -1,8 +1,8 @@
-using CashFlow.Customers.Application;
+using CashFlow.Features.Customers;
 
 namespace CashFlow.Worker;
 
-public class PublishCustomerUpdatedWorker(ILogger<PublishCustomerCreatedWorker> logger, IServiceScopeFactory scopeFactory) : BackgroundService
+public class PublishCustomerUpdatedWorker(ILogger<PublishCustomerUpdatedWorker> logger, IServiceScopeFactory scopeFactory) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -11,8 +11,8 @@ public class PublishCustomerUpdatedWorker(ILogger<PublishCustomerCreatedWorker> 
             logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
             
             await using var scope = scopeFactory.CreateAsyncScope();
-            var publishCustomerCreated = scope.ServiceProvider.GetRequiredService<IPublishCustomerCreated>();
-            await publishCustomerCreated.ExecuteAsync(stoppingToken);
+            var publishCustomerUpdated = scope.ServiceProvider.GetRequiredService<IPublishCustomerUpdated>();
+            await publishCustomerUpdated.ExecuteAsync(stoppingToken);
 
             await Task.Delay(10000, stoppingToken);
         }

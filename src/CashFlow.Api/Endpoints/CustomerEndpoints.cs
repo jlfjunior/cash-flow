@@ -1,6 +1,6 @@
-using CashFlow.Customers.Application;
-using CashFlow.Customers.Application.Requests;
-using CashFlow.Customers.Application.Responses;
+using CashFlow.Features.Customers;
+using CashFlow.Features.Customers.Requests;
+using CashFlow.Features.Customers.Responses;
 
 namespace CashFlow.Api.Endpoints;
 

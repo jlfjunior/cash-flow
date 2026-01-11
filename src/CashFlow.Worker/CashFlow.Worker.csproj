@@ -13,12 +13,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CashFlow.Consolidation.Application\CashFlow.Consolidation.Application.csproj" />
-      <ProjectReference Include="..\CashFlow.Consolidation.Data\CashFlow.Consolidation.Data.csproj" />
-      <ProjectReference Include="..\CashFlow.Customers.Application\CashFlow.Customers.Application.csproj" />
+      <ProjectReference Include="..\CashFlow.Data\CashFlow.Data.csproj" />
+      <ProjectReference Include="..\CashFlow.Domain\CashFlow.Domain.csproj" />
+      <ProjectReference Include="..\CashFlow.Features\CashFlow.Features.csproj" />
       <ProjectReference Include="..\CashFlow.Lib.EventBus\CashFlow.Lib.EventBus.csproj" />
       <ProjectReference Include="..\CashFlow.ServicesDefaults\CashFlow.ServicesDefaults.csproj" />
-      <ProjectReference Include="..\CashFlow.Transactions.Application\CashFlow.Transactions.Application.csproj" />
     </ItemGroup>
 
     <ItemGroup>

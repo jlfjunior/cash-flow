@@ -1,5 +1,5 @@
 using System.Net;
-using CashFlow.Transactions.Domain.Exceptions;
+using CashFlow.Domain.Exceptions;
 
 namespace CashFlow.Api;
 

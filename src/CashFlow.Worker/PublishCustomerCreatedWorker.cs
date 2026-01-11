@@ -1,4 +1,4 @@
-using CashFlow.Customers.Application;
+using CashFlow.Features.Customers;
 
 namespace CashFlow.Worker;
 

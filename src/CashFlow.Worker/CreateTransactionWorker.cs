@@ -1,5 +1,5 @@
-using CashFlow.Consolidation.Application;
-using CashFlow.Consolidation.Application.Responses;
+using CashFlow.Features.Consolidation;
+using CashFlow.Features.Consolidation.Responses;
 using CashFlow.Lib.EventBus;
 
 namespace CashFlow.Worker;

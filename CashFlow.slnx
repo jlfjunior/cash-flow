@@ -14,20 +14,12 @@
     <Project Path="src/CashFlow.Lib.Sharable/CashFlow.Lib.Sharable.csproj" />
     <Project Path="src\CashFlow.ServicesDefaults\CashFlow.ServicesDefaults.csproj" />
   </Folder>
-  <Folder Name="/src/CustomerManagement/">
-    <Project Path="src/CashFlow.Customers.Application/CashFlow.Customers.Application.csproj" />
-    <Project Path="src/CashFlow.Customers.Data/CashFlow.Customers.Data.csproj" />
-    <Project Path="src/CashFlow.Customers.Domain/CashFlow.Customers.Domain.csproj" />
+  <Folder Name="/src/Shared/">
+    <Project Path="src/CashFlow.Data/CashFlow.Data.csproj" />
+    <Project Path="src/CashFlow.Domain/CashFlow.Domain.csproj" />
   </Folder>
-  <Folder Name="/src/DataManagement/">
-    <Project Path="src/CashFlow.Consolidation.Application/CashFlow.Consolidation.Application.csproj" />
-    <Project Path="src/CashFlow.Consolidation.Data/CashFlow.Consolidation.Data.csproj" />
-    <Project Path="src/CashFlow.Consolidation.Domain/CashFlow.Consolidation.Domain.csproj" />
-  </Folder>
-  <Folder Name="/src/TransactionManagement/">
-    <Project Path="src/CashFlow.Transactions.Application/CashFlow.Transactions.Application.csproj" />
-    <Project Path="src/CashFlow.Transactions.Data/CashFlow.Transactions.Data.csproj" />
-    <Project Path="src/CashFlow.Transactions.Domain/CashFlow.Transactions.Domain.csproj" />
+  <Folder Name="/src/Features/">
+    <Project Path="src/CashFlow.Features/CashFlow.Features.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/CashFlow.Customers.Tests/CashFlow.Customers.Tests.csproj" />

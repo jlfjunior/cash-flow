@@ -1,5 +1,5 @@
 using System.Net;
-using CashFlow.Transactions.Application.Responses;
+using CashFlow.Features.Transactions.Responses;
 
 namespace CashFlow.Api.Endpoints;
 

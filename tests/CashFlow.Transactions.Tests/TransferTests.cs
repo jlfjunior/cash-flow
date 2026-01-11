@@ -1,8 +1,8 @@
-using CashFlow.Transactions.Application;
-using CashFlow.Transactions.Application.Requests;
-using CashFlow.Transactions.Domain.Entities;
-using CashFlow.Transactions.Domain.Repositories;
-using CashFlow.Transactions.Domain.Exceptions;
+using CashFlow.Domain.Entities;
+using CashFlow.Domain.Exceptions;
+using CashFlow.Domain.Repositories;
+using CashFlow.Features.Transactions;
+using CashFlow.Features.Transactions.Requests;
 using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -32,7 +32,7 @@ public class TransferTests
         var request = new TransferRequest(sourceAccountId, destinationAccountId, transferAmount);
 
         var logger = Substitute.For<ILogger<Transfer>>();
-        var repository = Substitute.For<IRepository>();
+        var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(sourceAccountId).Returns(sourceAccount);
@@ -88,7 +88,7 @@ public class TransferTests
         var request = new TransferRequest(sourceAccountId, destinationAccountId, transferAmount);
 
         var logger = Substitute.For<ILogger<Transfer>>();
-        var repository = Substitute.For<IRepository>();
+        var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(sourceAccountId).Returns(sourceAccount);
@@ -125,7 +125,7 @@ public class TransferTests
         var request = new TransferRequest(sourceAccountId, destinationAccountId, transferAmount);
 
         var logger = Substitute.For<ILogger<Transfer>>();
-        var repository = Substitute.For<IRepository>();
+        var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(sourceAccountId).Returns(sourceAccount);
@@ -157,7 +157,7 @@ public class TransferTests
         var request = new TransferRequest(accountId, accountId, transferAmount);
 
         var logger = Substitute.For<ILogger<Transfer>>();
-        var repository = Substitute.For<IRepository>();
+        var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(accountId).Returns(account);
@@ -183,7 +183,7 @@ public class TransferTests
         var request = new TransferRequest(sourceAccountId, destinationAccountId, transferAmount);
 
         var logger = Substitute.For<ILogger<Transfer>>();
-        var repository = Substitute.For<IRepository>();
+        var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(sourceAccountId).Returns((Account?)null);
@@ -214,7 +214,7 @@ public class TransferTests
         var request = new TransferRequest(sourceAccountId, destinationAccountId, transferAmount);
 
         var logger = Substitute.For<ILogger<Transfer>>();
-        var repository = Substitute.For<IRepository>();
+        var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(sourceAccountId).Returns(sourceAccount);
@@ -252,7 +252,7 @@ public class TransferTests
         var request = new TransferRequest(sourceAccountId, destinationAccountId, transferAmount);
 
         var logger = Substitute.For<ILogger<Transfer>>();
-        var repository = Substitute.For<IRepository>();
+        var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(sourceAccountId).Returns(sourceAccount);

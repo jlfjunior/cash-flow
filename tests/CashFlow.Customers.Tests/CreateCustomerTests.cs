@@ -1,6 +1,7 @@
-using CashFlow.Customers.Application;
-using CashFlow.Customers.Application.Requests;
-using CashFlow.Customers.Domain.Repositories;
+using CashFlow.Domain.Entities;
+using CashFlow.Domain.Repositories;
+using CashFlow.Features.Customers;
+using CashFlow.Features.Customers.Requests;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 
@@ -17,7 +18,7 @@ public class CreateCustomerTests
         };
 
         var logger = Substitute.For<ILogger<CreateCustomer>>();
-        var repository = Substitute.For<IRepository>();
+        var repository = Substitute.For<ICustomerRepository>();
 
         var createCustomer = new CreateCustomer(logger, repository);
 
@@ -25,8 +26,8 @@ public class CreateCustomerTests
 
         Assert.Equal("John Doe", customer.FullName);
 
-        await repository.Received(1).UpsertAsync(Arg.Is<CashFlow.Customers.Domain.Entities.Customer>(c => c.FullName == "John Doe"), Arg.Any<CancellationToken>());
-        await repository.Received(1).UpsertAsync(Arg.Any<IEnumerable<CashFlow.Customers.Domain.Entities.OutboxMessage>>(), Arg.Any<CancellationToken>());
+        await repository.Received(1).UpsertAsync(Arg.Is<Customer>(c => c.FullName == "John Doe"), Arg.Any<CancellationToken>());
+        await repository.Received(1).UpsertAsync(Arg.Any<IEnumerable<OutboxMessage>>(), Arg.Any<CancellationToken>());
         await repository.Received(1).CommitAsync(Arg.Any<CancellationToken>());
     }
 }

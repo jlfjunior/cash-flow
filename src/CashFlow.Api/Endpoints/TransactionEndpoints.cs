@@ -1,6 +1,6 @@
-using CashFlow.Lib.Sharable;
-using CashFlow.Transactions.Application.Requests;
-using CashFlow.Transactions.Application.Responses;
+using CashFlow.Domain;
+using CashFlow.Features.Transactions.Requests;
+using CashFlow.Features.Transactions.Responses;
 
 namespace CashFlow.Api.Endpoints;
 

@@ -38,7 +38,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\CashFlow.Customers.Application\CashFlow.Customers.Application.csproj" />
+      <ProjectReference Include="..\..\src\CashFlow.Domain\CashFlow.Domain.csproj" />
+      <ProjectReference Include="..\..\src\CashFlow.Features\CashFlow.Features.csproj" />
     </ItemGroup>
 
 </Project>

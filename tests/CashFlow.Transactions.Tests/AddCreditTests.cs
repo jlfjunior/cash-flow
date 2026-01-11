@@ -1,7 +1,7 @@
-using CashFlow.Transactions.Application;
-using CashFlow.Transactions.Application.Requests;
-using CashFlow.Transactions.Domain.Entities;
-using CashFlow.Transactions.Domain.Repositories;
+using CashFlow.Domain.Entities;
+using CashFlow.Domain.Repositories;
+using CashFlow.Features.Transactions;
+using CashFlow.Features.Transactions.Requests;
 using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -25,7 +25,7 @@ public class AddCreditTests
         var request = new CreateTransactionRequest(accountId, "Credit", creditAmount);
 
         var logger = Substitute.For<ILogger<CreateTransaction>>();
-        var repository = Substitute.For<IRepository>();
+        var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(accountId).Returns(account);
@@ -61,7 +61,7 @@ public class AddCreditTests
         var request = new CreateTransactionRequest(accountId, "Credit", creditAmount);
 
         var logger = Substitute.For<ILogger<CreateTransaction>>();
-        var repository = Substitute.For<IRepository>();
+        var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(accountId).Returns(account);
@@ -92,7 +92,7 @@ public class AddCreditTests
         var request = new CreateTransactionRequest(accountId, "Credit", creditAmount);
 
         var logger = Substitute.For<ILogger<CreateTransaction>>();
-        var repository = Substitute.For<IRepository>();
+        var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(accountId).Returns(account);

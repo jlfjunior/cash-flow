@@ -1,7 +1,7 @@
-using CashFlow.Customers.Application;
-using CashFlow.Customers.Application.Requests;
-using CashFlow.Customers.Domain.Entities;
-using CashFlow.Customers.Domain.Repositories;
+using CashFlow.Domain.Entities;
+using CashFlow.Domain.Repositories;
+using CashFlow.Features.Customers;
+using CashFlow.Features.Customers.Requests;
 using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -21,7 +21,7 @@ public class UpdateCustomerTests
         };
         
         var logger = Substitute.For<ILogger<UpdateCustomer>>();
-        var repository = Substitute.For<IRepository>();
+        var repository = Substitute.For<ICustomerRepository>();
         var eventBus = Substitute.For<IEventBus>();
         
         repository.GetByIdAsync(customer.Id).Returns(customer);
@@ -48,7 +48,7 @@ public class UpdateCustomerTests
         };
         
         var logger = Substitute.For<ILogger<UpdateCustomer>>();
-        var repository = Substitute.For<IRepository>();
+        var repository = Substitute.For<ICustomerRepository>();
         var eventBus = Substitute.For<IEventBus>();
         
         repository.GetByIdAsync(Arg.Any<Guid>()).Returns((Customer?)null);
