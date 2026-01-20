@@ -1,6 +1,6 @@
 using CashFlow.Domain;
+using CashFlow.Domain.Events;
 using CashFlow.Domain.Repositories;
-using CashFlow.Features.Consolidation.Responses;
 using CashFlow.Features.Transactions.Requests;
 using CashFlow.Features.Transactions.Responses;
 using CashFlow.Lib.EventBus;
@@ -29,12 +29,12 @@ namespace CashFlow.Features.Transactions
             if (transactionCreatedEvent != null)
             {
                 // Create event with CustomerId for consolidation
-                var consolidationEvent = new CashFlow.Features.Consolidation.Responses.TransactionCreated(
+                var consolidationEvent = new TransactionCreated(
                     transactionCreatedEvent.Id,
                     account.CustomerId,
-                    transactionCreatedEvent.ReferenceDate,
                     transactionCreatedEvent.Direction,
                     transactionCreatedEvent.TransactionType,
+                    transactionCreatedEvent.ReferenceDate,
                     transactionCreatedEvent.Value);
                 
                 await eventBus.PublishAsync(consolidationEvent, "transaction.created");

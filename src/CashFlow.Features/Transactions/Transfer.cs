@@ -1,8 +1,8 @@
 using CashFlow.Domain;
 using CashFlow.Domain.Entities;
+using CashFlow.Domain.Events;
 using CashFlow.Domain.Exceptions;
 using CashFlow.Domain.Repositories;
-using CashFlow.Features.Consolidation.Responses;
 using CashFlow.Features.Transactions.Requests;
 using CashFlow.Features.Transactions.Responses;
 using CashFlow.Lib.EventBus;
@@ -48,12 +48,12 @@ public class Transfer(
             var sourceTransactionEvent = sourceAccount.Events.OfType<CashFlow.Domain.Events.TransactionCreated>().LastOrDefault();
             if (sourceTransactionEvent != null)
             {
-                var consolidationEvent = new CashFlow.Features.Consolidation.Responses.TransactionCreated(
+                var consolidationEvent = new TransactionCreated(
                     sourceTransactionEvent.Id,
                     sourceAccount.CustomerId,
-                    sourceTransactionEvent.ReferenceDate,
                     sourceTransactionEvent.Direction,
                     sourceTransactionEvent.TransactionType,
+                    sourceTransactionEvent.ReferenceDate,
                     sourceTransactionEvent.Value);
                 
                 await eventBus.PublishAsync(consolidationEvent, "transaction.created");
@@ -69,12 +69,12 @@ public class Transfer(
             var destinationTransactionEvent = destinationAccount.Events.OfType<CashFlow.Domain.Events.TransactionCreated>().LastOrDefault();
             if (destinationTransactionEvent != null)
             {
-                var consolidationEvent = new CashFlow.Features.Consolidation.Responses.TransactionCreated(
+                var consolidationEvent = new TransactionCreated(
                     destinationTransactionEvent.Id,
                     destinationAccount.CustomerId,
-                    destinationTransactionEvent.ReferenceDate,
                     destinationTransactionEvent.Direction,
                     destinationTransactionEvent.TransactionType,
+                    destinationTransactionEvent.ReferenceDate,
                     destinationTransactionEvent.Value);
                 
                 await eventBus.PublishAsync(consolidationEvent, "transaction.created");

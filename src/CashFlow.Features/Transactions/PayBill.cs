@@ -1,7 +1,7 @@
 using CashFlow.Domain;
+using CashFlow.Domain.Events;
 using CashFlow.Domain.Exceptions;
 using CashFlow.Domain.Repositories;
-using CashFlow.Features.Consolidation.Responses;
 using CashFlow.Features.Transactions.Requests;
 using CashFlow.Features.Transactions.Responses;
 using CashFlow.Lib.EventBus;
@@ -39,12 +39,12 @@ public class PayBill(
         var transactionCreatedEvent = account.Events.OfType<CashFlow.Domain.Events.TransactionCreated>().LastOrDefault();
         if (transactionCreatedEvent != null)
         {
-            var consolidationEvent = new CashFlow.Features.Consolidation.Responses.TransactionCreated(
+            var consolidationEvent = new TransactionCreated(
                 transactionCreatedEvent.Id,
                 account.CustomerId,
-                transactionCreatedEvent.ReferenceDate,
                 transactionCreatedEvent.Direction,
                 transactionCreatedEvent.TransactionType,
+                transactionCreatedEvent.ReferenceDate,
                 transactionCreatedEvent.Value);
             
             await eventBus.PublishAsync(consolidationEvent, "transaction.created");
