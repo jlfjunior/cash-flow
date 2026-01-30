@@ -1,4 +1,4 @@
-namespace CashFlow.Features.Customers;
+namespace CashFlow.Features.CreateCustomer;
 
 public interface IPublishCustomerCreated
 {

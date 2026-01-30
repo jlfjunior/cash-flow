@@ -2,12 +2,9 @@ using System.Text.Json;
 using CashFlow.Domain.Entities;
 using CashFlow.Domain.Events;
 using CashFlow.Domain.Repositories;
-using CashFlow.Features.Customers.Requests;
-using CashFlow.Features.Customers.Responses;
-using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 
-namespace CashFlow.Features.Customers;
+namespace CashFlow.Features.CreateCustomer;
 
 public class CreateCustomer(ILogger<CreateCustomer> logger, ICustomerRepository repository)
     : ICreateCustomer

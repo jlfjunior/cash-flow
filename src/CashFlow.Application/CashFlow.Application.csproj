@@ -4,12 +4,25 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>CashFlow.Features</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\CashFlow.Data\CashFlow.Data.csproj" />
       <ProjectReference Include="..\CashFlow.Domain\CashFlow.Domain.csproj" />
       <ProjectReference Include="..\CashFlow.Lib.EventBus\CashFlow.Lib.EventBus.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Customers\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Customers\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Customers\**" />
     </ItemGroup>
 
 </Project>

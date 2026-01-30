@@ -1,7 +1,6 @@
 using CashFlow.Domain.Entities;
 using CashFlow.Domain.Repositories;
-using CashFlow.Features.Customers;
-using CashFlow.Features.Customers.Requests;
+using CashFlow.Features.UpdateCustomer;
 using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -15,10 +14,7 @@ public class UpdateCustomerTests
     {
         var customer = new Customer("Doe");
         
-        var request = new UpdateCustomerRequest(customer.Id)
-        {
-            FullName = "John Doe",
-        };
+        var request = new UpdateCustomerRequest(Id: customer.Id, FullName: "John Doe");
         
         var logger = Substitute.For<ILogger<UpdateCustomer>>();
         var repository = Substitute.For<ICustomerRepository>();
@@ -41,11 +37,7 @@ public class UpdateCustomerTests
     [Fact]
     public async Task UpdateCustomer_FailAsync()
     {
-        
-        var request = new UpdateCustomerRequest(Guid.NewGuid())
-        {
-            FullName = "John Doe",
-        };
+        var request = new UpdateCustomerRequest(Id: Guid.NewGuid(), FullName: "John Doe");
         
         var logger = Substitute.For<ILogger<UpdateCustomer>>();
         var repository = Substitute.For<ICustomerRepository>();

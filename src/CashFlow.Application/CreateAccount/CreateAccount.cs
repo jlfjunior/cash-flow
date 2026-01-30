@@ -6,7 +6,7 @@ using CashFlow.Features.Transactions.Requests;
 using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 
-namespace CashFlow.Features.Transactions;
+namespace CashFlow.Features.CreateAccount;
 
 public class CreateAccount(ILogger<CreateAccount> logger, 
     IAccountRepository accountRepository, 

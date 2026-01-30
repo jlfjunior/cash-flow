@@ -1,4 +1,4 @@
-namespace CashFlow.Features.Customers.Responses
+namespace CashFlow.Features.CreateCustomer
 {
     public record CreateCustomerResponse(Guid Id, string FullName);
 }

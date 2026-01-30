@@ -1,7 +1,4 @@
-using CashFlow.Features.Customers.Requests;
-using CashFlow.Features.Customers.Responses;
-
-namespace CashFlow.Features.Customers;
+namespace CashFlow.Features.CreateCustomer;
 
 public interface ICreateCustomer
 {

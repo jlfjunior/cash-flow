@@ -2,6 +2,7 @@ using CashFlow.Domain.Entities;
 using CashFlow.Domain.Repositories;
 using CashFlow.Features.Transactions;
 using CashFlow.Features.Transactions.Requests;
+using CashFlow.Features.Withdraw;
 using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -22,15 +23,15 @@ public class AddDebitTests
         account.AddCredit(initialBalance);
         
         var accountId = account.Id;
-        var request = new CreateTransactionRequest(accountId, "Debit", debitAmount);
+        var request = new WithdrawRequest(accountId, "Debit", debitAmount);
 
-        var logger = Substitute.For<ILogger<CreateTransaction>>();
+        var logger = Substitute.For<ILogger<Withdraw>>();
         var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(accountId).Returns(account);
 
-        var createTransaction = new CreateTransaction(logger, repository, eventBus);
+        var createTransaction = new Withdraw(logger, repository, eventBus);
 
         // Act
         var result = await createTransaction.ExecuteAsync(request, CancellationToken.None);
@@ -61,15 +62,15 @@ public class AddDebitTests
         account.AddCredit(initialBalance);
         
         var accountId = account.Id;
-        var request = new CreateTransactionRequest(accountId, "Debit", debitAmount);
+        var request = new WithdrawRequest(accountId, "Debit", debitAmount);
 
-        var logger = Substitute.For<ILogger<CreateTransaction>>();
+        var logger = Substitute.For<ILogger<Withdraw>>();
         var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(accountId).Returns(account);
 
-        var createTransaction = new CreateTransaction(logger, repository, eventBus);
+        var createTransaction = new Withdraw(logger, repository, eventBus);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
@@ -92,15 +93,15 @@ public class AddDebitTests
         account.AddCredit(initialBalance);
         
         var accountId = account.Id;
-        var request = new CreateTransactionRequest(accountId, "Debit", debitAmount);
+        var request = new WithdrawRequest(accountId, "Debit", debitAmount);
 
-        var logger = Substitute.For<ILogger<CreateTransaction>>();
+        var logger = Substitute.For<ILogger<Withdraw>>();
         var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(accountId).Returns(account);
 
-        var createTransaction = new CreateTransaction(logger, repository, eventBus);
+        var createTransaction = new Withdraw(logger, repository, eventBus);
 
         // Act
         var result = await createTransaction.ExecuteAsync(request, CancellationToken.None);
@@ -126,15 +127,15 @@ public class AddDebitTests
         account.AddCredit(initialBalance);
         
         var accountId = account.Id;
-        var request = new CreateTransactionRequest(accountId, "Debit", debitAmount);
+        var request = new WithdrawRequest(accountId, "Debit", debitAmount);
 
-        var logger = Substitute.For<ILogger<CreateTransaction>>();
+        var logger = Substitute.For<ILogger<Withdraw>>();
         var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(accountId).Returns(account);
 
-        var createTransaction = new CreateTransaction(logger, repository, eventBus);
+        var createTransaction = new Withdraw(logger, repository, eventBus);
 
         // Act
         await createTransaction.ExecuteAsync(request, CancellationToken.None);

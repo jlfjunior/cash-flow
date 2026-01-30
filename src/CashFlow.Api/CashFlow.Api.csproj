@@ -16,7 +16,7 @@
     <ItemGroup>
       <ProjectReference Include="..\CashFlow.Data\CashFlow.Data.csproj" />
       <ProjectReference Include="..\CashFlow.Domain\CashFlow.Domain.csproj" />
-      <ProjectReference Include="..\CashFlow.Features\CashFlow.Features.csproj" />
+      <ProjectReference Include="..\CashFlow.Application\CashFlow.Application.csproj" />
       <ProjectReference Include="..\CashFlow.ServicesDefaults\CashFlow.ServicesDefaults.csproj" />
     </ItemGroup>
 

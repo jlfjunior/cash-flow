@@ -1,7 +1,9 @@
 using CashFlow.Data;
 using CashFlow.Data.Repositories;
 using CashFlow.Domain.Repositories;
+using CashFlow.Features.CreateCustomer;
 using CashFlow.Features.Customers;
+using CashFlow.Features.UpdateCustomer;
 using CashFlow.Lib.EventBus;
 using CashFlow.Worker;
 using MongoDB.Driver;

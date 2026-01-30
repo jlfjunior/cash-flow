@@ -1,7 +1,8 @@
 using CashFlow.Domain.Entities;
 using CashFlow.Domain.Repositories;
-using CashFlow.Features.Transactions;
+using CashFlow.Features.Deposit;
 using CashFlow.Features.Transactions.Requests;
+using CashFlow.Features.Withdraw;
 using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -22,15 +23,15 @@ public class AddCreditTests
         account.AddCredit(initialBalance);
         
         var accountId = account.Id;
-        var request = new CreateTransactionRequest(accountId, "Credit", creditAmount);
+        var request = new DepositRequest(accountId, "Credit", creditAmount);
 
-        var logger = Substitute.For<ILogger<CreateTransaction>>();
+        var logger = Substitute.For<ILogger<Withdraw>>();
         var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(accountId).Returns(account);
 
-        var createTransaction = new CreateTransaction(logger, repository, eventBus);
+        var createTransaction = new Deposit(logger, repository, eventBus);
 
         // Act
         var result = await createTransaction.ExecuteAsync(request, CancellationToken.None);
@@ -58,15 +59,15 @@ public class AddCreditTests
 
         var account = new Account(customerId);
         var accountId = account.Id;
-        var request = new CreateTransactionRequest(accountId, "Credit", creditAmount);
+        var request = new DepositRequest(accountId, "Credit", creditAmount);
 
-        var logger = Substitute.For<ILogger<CreateTransaction>>();
+        var logger = Substitute.For<ILogger<Withdraw>>();
         var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(accountId).Returns(account);
 
-        var createTransaction = new CreateTransaction(logger, repository, eventBus);
+        var createTransaction = new Deposit(logger, repository, eventBus);
 
         // Act
         var result = await createTransaction.ExecuteAsync(request, CancellationToken.None);
@@ -89,15 +90,15 @@ public class AddCreditTests
 
         var account = new Account(customerId);
         var accountId = account.Id;
-        var request = new CreateTransactionRequest(accountId, "Credit", creditAmount);
+        var request = new DepositRequest(accountId, "Credit", creditAmount);
 
-        var logger = Substitute.For<ILogger<CreateTransaction>>();
+        var logger = Substitute.For<ILogger<Withdraw>>();
         var repository = Substitute.For<IAccountRepository>();
         var eventBus = Substitute.For<IEventBus>();
 
         repository.GetByIdAsync(accountId).Returns(account);
 
-        var createTransaction = new CreateTransaction(logger, repository, eventBus);
+        var createTransaction = new Deposit(logger, repository, eventBus);
 
         // Act
         await createTransaction.ExecuteAsync(request, CancellationToken.None);

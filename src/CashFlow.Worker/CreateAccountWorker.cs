@@ -1,5 +1,6 @@
 using CashFlow.Domain;
 using CashFlow.Domain.Events;
+using CashFlow.Features.CreateAccount;
 using CashFlow.Features.Transactions.Requests;
 using CashFlow.Lib.EventBus;
 

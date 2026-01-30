@@ -3,6 +3,7 @@ using CashFlow.Domain.Exceptions;
 using CashFlow.Domain.Repositories;
 using CashFlow.Features.Transactions;
 using CashFlow.Features.Transactions.Requests;
+using CashFlow.Features.Transfer;
 using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 using NSubstitute;

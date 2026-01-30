@@ -1,6 +1,5 @@
-using CashFlow.Features.Customers;
-using CashFlow.Features.Customers.Requests;
-using CashFlow.Features.Customers.Responses;
+using CashFlow.Features.CreateCustomer;
+using CashFlow.Features.UpdateCustomer;
 
 namespace CashFlow.Api.Endpoints;
 
@@ -24,13 +23,10 @@ public static class CustomerEndpoints
             })
             .WithName("CreateCustomer");
 
-        app.MapPost("/customers/{Id}", async (Guid id, CustomerRequest request, IUpdateCustomer service, CancellationToken ct) =>
+        app.MapPost("/customers/{Id}", async (Guid id, UpdateCustomerRequest request, IUpdateCustomer service, CancellationToken ct) =>
             {
 
-                var updateCustomerRequest = new UpdateCustomerRequest(id)
-                {
-                    FullName = request.FullName,
-                };
+                var updateCustomerRequest = request with { Id = id };
                 var customer = await service.ExecuteAsync(updateCustomerRequest, ct);
     
                 return Results.Ok(customer);

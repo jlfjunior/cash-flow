@@ -1,6 +1,6 @@
 using CashFlow.Domain;
+using CashFlow.Features.CreateAccount;
 using CashFlow.Features.Transactions.Requests;
-using CashFlow.Features.Transactions.Responses;
 
 namespace CashFlow.Api.Endpoints;
 
@@ -9,7 +9,7 @@ public static class TransactionEndpoints
     public static void MapTransactionEndpoints(this WebApplication app)
     {
         app.MapPost("/transactions/credit",
-                async (CreateTransactionRequest request, ICommand<CreateTransactionRequest, AccountResponse> command) =>
+                async (DepositRequest request, ICommand<DepositRequest, AccountResponse> command) =>
                 {
                     var transaction = await command.ExecuteAsync(request,  CancellationToken.None);
         

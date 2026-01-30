@@ -5,7 +5,7 @@ using CashFlow.Domain.Repositories;
 using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 
-namespace CashFlow.Features.Customers;
+namespace CashFlow.Features.UpdateCustomer;
 
 public class PublishCustomerUpdated(
     ILogger<PublishCustomerUpdated> logger, 

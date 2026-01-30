@@ -2,12 +2,10 @@ using System.Text.Json;
 using CashFlow.Domain.Entities;
 using CashFlow.Domain.Events;
 using CashFlow.Domain.Repositories;
-using CashFlow.Features.Customers.Requests;
-using CashFlow.Features.Customers.Responses;
 using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 
-namespace CashFlow.Features.Customers;
+namespace CashFlow.Features.UpdateCustomer;
 
 public class UpdateCustomer(ILogger<UpdateCustomer> logger, ICustomerRepository repository, IEventBus eventBus) : IUpdateCustomer
 {

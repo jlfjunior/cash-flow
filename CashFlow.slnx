@@ -9,8 +9,8 @@
     <Project Path="src/CashFlow.AppHost/CashFlow.AppHost.csproj" />
     <Project Path="src/CashFlow.Data/CashFlow.Data.csproj" />
     <Project Path="src/CashFlow.Domain/CashFlow.Domain.csproj" />
-    <Project Path="src/CashFlow.Features/CashFlow.Features.csproj" />
     <Project Path="src/CashFlow.Worker/CashFlow.Worker.csproj" />
+    <Project Path="src\CashFlow.Application\CashFlow.Application.csproj" />
   </Folder>
   <Folder Name="/src/Core/">
     <Project Path="src/CashFlow.Lib.EventBus/CashFlow.Lib.EventBus.csproj" />

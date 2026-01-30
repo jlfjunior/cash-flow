@@ -1,20 +1,24 @@
 using CashFlow.Domain;
 using CashFlow.Domain.Events;
 using CashFlow.Domain.Repositories;
+using CashFlow.Features.CreateAccount;
+using CashFlow.Features.Transactions;
 using CashFlow.Features.Transactions.Requests;
-using CashFlow.Features.Transactions.Responses;
 using CashFlow.Lib.EventBus;
 using Microsoft.Extensions.Logging;
 
-namespace CashFlow.Features.Transactions
+namespace CashFlow.Features.Deposit
 {
-    public class CreateTransaction(ILogger<CreateTransaction> logger, 
+    public class Deposit(ILogger<Withdraw.Withdraw> logger, 
         IAccountRepository accountRepository, 
         IEventBus eventBus)
-        : ICommand<CreateTransactionRequest, AccountResponse>
+        : ICommand<DepositRequest, AccountResponse>
     {
-        public async Task<AccountResponse> ExecuteAsync(CreateTransactionRequest request, CancellationToken token)
+        public async Task<AccountResponse> ExecuteAsync(DepositRequest request, CancellationToken token)
         {
+            if(request.Direction == "Debit")
+                throw new NotImplementedException();
+            
             var account = await accountRepository.GetByIdAsync(request.AccountId);
 
             account.AddTransaction(request.Direction, request.Value);

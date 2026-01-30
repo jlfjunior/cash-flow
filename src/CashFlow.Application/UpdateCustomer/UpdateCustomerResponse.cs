@@ -1,3 +1,3 @@
-namespace CashFlow.Features.Customers.Responses;
+namespace CashFlow.Features.UpdateCustomer;
 
 public record UpdateCustomerResponse(Guid Id, string FullName);

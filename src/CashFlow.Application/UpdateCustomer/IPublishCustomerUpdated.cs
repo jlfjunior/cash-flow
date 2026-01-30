@@ -1,4 +1,4 @@
-namespace CashFlow.Features.Customers;
+namespace CashFlow.Features.UpdateCustomer;
 
 public interface IPublishCustomerUpdated
 {

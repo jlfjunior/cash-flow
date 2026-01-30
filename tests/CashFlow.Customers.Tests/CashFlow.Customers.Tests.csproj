@@ -39,7 +39,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\CashFlow.Domain\CashFlow.Domain.csproj" />
-      <ProjectReference Include="..\..\src\CashFlow.Features\CashFlow.Features.csproj" />
+      <ProjectReference Include="..\..\src\CashFlow.Application\CashFlow.Application.csproj" />
     </ItemGroup>
 
 </Project>
